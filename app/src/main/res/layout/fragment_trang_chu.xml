@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/frametrangchu"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragment.TrangChuFragment">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/bkimg"
+                    android:layout_width="316dp"
+                    android:layout_height="107dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="45dp"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/logo"
+                    />
+
+
+                <TextView
+                    android:hint="Nhập từ khóa tìm kiếm...."
+                    android:id="@+id/edtserchTrangChu"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bksearch"
+                    android:drawableRight="@drawable/searchicon"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:minHeight="45dp"
+                    android:paddingLeft="10sp"
+                    android:padding="15dp"
+                    android:textColorHint="#8F8F8F"
+                    android:textSize="15sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15dp"
+                        android:text="DEALS"
+                        android:textColor="#039EFA"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="60dp"
+                        android:layout_height="3dp"
+                        android:layout_marginTop="0dp"
+                        android:background="@color/black"
+                        android:backgroundTint="#039EFA"></LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tvDMAmThuc"
+                        android:layout_width="74dp"
+                        android:layout_height="72dp"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/cu"
+                        android:drawableTop="@drawable/food"
+                        android:gravity="center"
+                        android:text="Ẩm thực"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvDMDuLich"
+                        android:layout_width="74dp"
+                        android:layout_height="72dp"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/cu"
+                        android:drawableTop="@drawable/travel"
+                        android:gravity="center"
+                        android:text="Du lịch"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvDanhMucSpa"
+                        android:layout_width="74dp"
+                        android:layout_height="72dp"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/cu"
+                        android:drawableTop="@drawable/spa"
+                        android:gravity="center"
+                        android:text="Spa"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="20dp">
+
+                    <com.denzcoskun.imageslider.ImageSlider
+                        android:id="@+id/image_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        app:iss_auto_cycle="true"
+                        app:iss_corner_radius="20"
+                        app:iss_delay="1000"
+                        app:iss_period="1000" />
+
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="Ẩm thực"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="270dp"
+                        android:layout_height="2dp"
+                        android:background="@color/black"
+                        android:backgroundTint="@color/black"></LinearLayout>
+
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvVoucherMain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="Du lịch"
+                        android:layout_marginRight="20dp"
+                        android:textColor="@color/black"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="270dp"
+                        android:layout_height="2dp"
+                        android:background="@color/black"
+                        android:backgroundTint="@color/black"></LinearLayout>
+
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvVoucherdl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </ScrollView>
+</FrameLayout>

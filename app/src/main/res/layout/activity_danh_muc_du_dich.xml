@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bkcolor"
+    android:orientation="vertical"
+    tools:context=".DanhMucDuDichActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edtsearch"
+            android:backgroundTint="@color/white"
+            android:padding="5dp"
+            android:hint="Nhập thông tin tìm kiếm"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_margin="8dp"
+            android:textSize="18dp"
+            android:background="@drawable/viensearch"/>
+
+        <ImageButton
+            android:layout_marginTop="15dp"
+            android:id="@+id/btnSearch"
+            android:layout_width="50dp"
+            android:layout_height="42dp"
+            android:background="@drawable/border_edit"
+            android:backgroundTint="#7DCEF3"
+            android:src="@drawable/baseline_search_24"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="30dp"
+        android:id="@+id/rvDanhmucDuLich"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

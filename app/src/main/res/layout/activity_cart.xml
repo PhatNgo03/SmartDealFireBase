@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/frameactivityCart"
+    tools:context=".CartActivity">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/activityCart"
+    tools:context=".CartActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/backcart"
+            android:layout_width="21dp"
+            android:layout_height="19dp"
+            android:layout_marginTop="23dp"
+            android:layout_marginLeft="23dp"
+            android:src="@drawable/img">
+        </ImageView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="-50dp"
+            android:text="Giỏ Hàng"
+            android:textColor="@color/black"
+            android:textSize="24dp">
+
+        </TextView>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvGioHang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btngiaohang"
+        android:layout_marginTop="350dp"
+        android:layout_gravity="center"
+        android:layout_width="259dp"
+        android:layout_height="51dp"
+        android:textSize="20dp"
+        android:background="@drawable/cc"
+        android:text="Nhập thông tin giao hàng"
+        android:textAllCaps="false"/>
+</LinearLayout>
+</FrameLayout>

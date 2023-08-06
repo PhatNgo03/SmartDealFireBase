@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "679979965939",
+    "project_id": "smartdeal-53219",
+    "storage_bucket": "smartdeal-53219.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679979965939:android:ea01735fb1884eac4a4686",
+        "android_client_info": {
+          "package_name": "com.example.smartdealfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679979965939-t5r7lhin01a0boolo1b6fcsuncieb1be.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg-jDalotDmfobUBapYVJjnqDTlCDk6NU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "679979965939-t5r7lhin01a0boolo1b6fcsuncieb1be.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679979965939:android:f0e34a5ced3aab794a4686",
+        "android_client_info": {
+          "package_name": "edu.huflit.doancnpm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679979965939-t5r7lhin01a0boolo1b6fcsuncieb1be.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg-jDalotDmfobUBapYVJjnqDTlCDk6NU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "679979965939-t5r7lhin01a0boolo1b6fcsuncieb1be.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

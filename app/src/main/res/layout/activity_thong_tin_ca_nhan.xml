@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ThongTinCaNhanActivity"
+    android:background="#E5EBFF">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="32dp"
+        android:layout_height="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="23dp"
+        android:src="@drawable/img">
+
+    </ImageView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="314dp"
+        android:layout_height="566dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="30dp"
+        app:cardCornerRadius="10dp">
+        <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Họ và tên"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edthovaten"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    android:paddingLeft="15dp"
+                    android:background="@drawable/vienlogin"
+                    android:ems="12"
+                    android:minHeight="40dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Ngày sinh"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/edtngaysinh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    android:background="@drawable/vienlogin"
+                    android:ems="12"
+                    android:paddingLeft="15dp"
+                    android:minHeight="40dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+
+                    android:text="Số điện thoại"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtSDT"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    android:paddingLeft="15dp"
+                    android:background="@drawable/vienlogin"
+                    android:ems="12"
+                    android:minHeight="40dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Giới tính"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerGioiTinh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    android:paddingLeft="15dp"
+                    android:background="@drawable/vienlogin" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+
+                    android:text="Dịa chỉ"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtdiachi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    android:paddingLeft="15dp"
+                    android:background="@drawable/vienlogin"
+                    android:ems="12"
+                    android:minHeight="40dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+
+                    android:text="Email"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    android:paddingLeft="15dp"
+                    android:background="@drawable/vienlogin"
+                    android:ems="12"
+                    android:minHeight="40dp" />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnsuatt"
+        android:layout_width="125dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/white"
+        android:text="LƯU"
+        android:textStyle="bold" />
+</LinearLayout>
