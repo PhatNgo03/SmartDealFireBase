@@ -72,18 +72,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.GioHangViewHol
         holder.tvGiaGoc.setText(String.valueOf(itemCart.getPrice()));
         holder.tvSoLuong.setText(String.valueOf(itemCart.getQuantity()));
 
-        StorageReference storageRef = storage.getReference();
-        int targerWidth = 119;
-        int targetHeight = 70;
-        StorageReference imamgeRef = storageRef.child(String.valueOf(itemCart.getHinhAnh()));
-        imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap,targerWidth,targetHeight,false);
-                holder.imgAnhSP.setImageBitmap(resizeBitMap);
-            }
-        });
+        Glide.with(holder.itemView.getContext()).load(itemCart.getHinhAnh()).into(holder.imgAnhSP);
+
+//        StorageReference storageRef = storage.getReference();
+//        int targerWidth = 119;
+//        int targetHeight = 70;
+//        StorageReference imamgeRef = storageRef.child(String.valueOf(itemCart.getHinhAnh()));
+//        imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap,targerWidth,targetHeight,false);
+//                holder.imgAnhSP.setImageBitmap(resizeBitMap);
+//            }
+//        });
 
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {

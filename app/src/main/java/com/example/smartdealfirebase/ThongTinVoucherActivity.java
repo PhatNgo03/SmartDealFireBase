@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.smartdealfirebase.Adapter.CartAdapter;
 import com.example.smartdealfirebase.Fragment.CartFragment;
 import com.example.smartdealfirebase.Model.ItemCart;
@@ -58,6 +59,7 @@ public class ThongTinVoucherActivity extends AppCompatActivity implements  CartF
     CartAdapter cartAdapter;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
+    Voucher voucher;
 
     private ActivityResultLauncher<Intent> buyActivityResultLauncher;
     @Override
@@ -71,27 +73,32 @@ public class ThongTinVoucherActivity extends AppCompatActivity implements  CartF
         tvPrice = findViewById(R.id.tvIFPrice);
         tvMota = findViewById(R.id.tvIFMota);
 
+
+
 //        Intent intent = getIntent();
 //        Voucher voucher = (Voucher) intent.getSerializableExtra("ThongTinVoucher");
 
         cartAdapter = new CartAdapter(new ArrayList<ItemCart>());
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("ThongTinVoucher")) {
-            Voucher voucher = (Voucher) intent.getSerializableExtra("ThongTinVoucher");
+             voucher = (Voucher) intent.getSerializableExtra("ThongTinVoucher");
             if (voucher != null) {
                 // Display the voucher details
 //                Glide.with(this).load(voucher.getImgVoucher()).into(ivVoucherImage);
+
+                Glide.with(this).load(voucher.getHinhvc()).into(ivVoucherImage);
+
                 int targerWidth = 400;
                 int targetHeight = 209;
-                StorageReference imamgeRef = storageRef.child(String.valueOf(voucher.getHinhvc()));
-                imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap, targerWidth, targetHeight, false);
-                        ivVoucherImage.setImageBitmap(resizeBitMap);
-                    }
-                });
+//                StorageReference imamgeRef = storageRef.child(String.valueOf(voucher.getHinhvc()));
+//                imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//                    @Override
+//                    public void onSuccess(byte[] bytes) {
+//                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                        Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap, targerWidth, targetHeight, false);
+//                        ivVoucherImage.setImageBitmap(resizeBitMap);
+//                    }
+//                });
                 tvVoucherName.setText(voucher.getVoucherName());
                 tvDiscountPrice.setText(String.valueOf(voucher.getDiscountPrice()));
                 tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -100,15 +107,102 @@ public class ThongTinVoucherActivity extends AppCompatActivity implements  CartF
             }
         }
         btBuy = findViewById(R.id.btMuaHang);
-//        btBuy.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        btAddToCart = findViewById(R.id.btThemVaoGioHang);
+        btAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String voucherName = tvVoucherName.getText().toString();
+                int discountPrice = Integer.parseInt(tvDiscountPrice.getText().toString());
+                int price = Integer.parseInt(tvPrice.getText().toString());
+                int quantity = 1;
+                int Total = (quantity * discountPrice);
+                List<String> imageUrls = new ArrayList<>();
+                // Thực hiện truy vấn Firestore để lấy hình ảnh của voucher
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference voucherRef = db.collection("Voucher");
+                voucherRef.whereEqualTo("TenVoucher", voucherName)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                                        if (firebaseUser == null) {
+                                            // Nếu người dùng chưa đăng nhập, không có dữ liệu để hiển thị
+                                            return;
+                                        }
+
+                                        String userid = firebaseUser.getUid(); // Lấy email của người dùng hiện tại
+                                        // Lấy link hình ảnh từ document
+                                        String imageUrl = document.getString("HinhAnh");
+                                        imageUrls.add(imageUrl);
+
+                                        // Tiếp tục thêm dữ liệu vào Firestore
+                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                        Map<String, Object> cartItem = new HashMap<>();
+                                        cartItem.put("voucherName", voucherName);
+                                        cartItem.put("discountPrice", discountPrice);
+                                        cartItem.put("price", price);
+                                        cartItem.put("quantity", quantity);
+                                        cartItem.put("ToTal", Total);
+                                        cartItem.put("HinhAnh", voucher.getHinhvc());
+                                        cartItem.put("UserId",userid);
+
+                                        db.collection("cartItems").add(cartItem)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        // Tạo một item mới từ dữ liệu được thêm vào Firestore
+                                                        ItemCart itemCart = new ItemCart("", voucherName, discountPrice, price, quantity, Total, voucher.getHinhvc(),userid);
+                                                        // Gọi phương thức addItemToCart trong CartFragment để cập nhật RecyclerView
+                                                        CartFragment cartFragment = (CartFragment) getSupportFragmentManager().findFragmentById(R.id.framelayourCart);
+                                                        if (cartFragment != null) {
+                                                            cartFragment.addItemToCart(itemCart);
+                                                        }
+                                                        AlertDialog.Builder builder = new AlertDialog.Builder(ThongTinVoucherActivity.this);
+                                                        builder.setTitle("Thành công");
+                                                        builder.setMessage("Đã thêm vào giỏ hàng");
+                                                        builder.setPositiveButton("OK", null);
+                                                        AlertDialog dialog = builder.create();
+                                                        dialog.show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Xử lý khi có lỗi xảy ra khi lưu thông tin món hàng
+                                                    }
+                                                });
+
+                                        cartAdapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    // Xử lý khi có lỗi xảy ra khi truy vấn dữ liệu voucher
+                                }
+                            }
+                        });
+            }
+        });
+        buyActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        // Xử lý kết quả trả về từ CartFragment (nếu cần)
+                    }
+                }
+        );
+        btBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //                // Lấy thông tin voucher từ giao diện
 //                String voucherName = tvVoucherName.getText().toString();
 //                int discountPrice = Integer.parseInt(tvDiscountPrice.getText().toString());
 //                int price = Integer.parseInt(tvPrice.getText().toString());
 //                int quantity = 1;
-//                ItemCart itemCart = new ItemCart("", voucherName, discountPrice, price, quantity);
+//                int ToTal = quantity * discountPrice;
+//                ItemCart itemCart = new ItemCart("", voucherName, discountPrice, price, quantity,ToTal,"","");
 //
 //                // Thêm dữ liệu vào Firebase Firestore
 //                FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -122,56 +216,12 @@ public class ThongTinVoucherActivity extends AppCompatActivity implements  CartF
 //                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
 //                            @Override
 //                            public void onSuccess(DocumentReference documentReference) {
-//                                // Gọi phương thức navigateToCartFragment để chuyển sang CartFragment
-////                                navigateToCartFragment(itemCart);
-//
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                // Xử lý khi có lỗi xảy ra khi lưu thông tin món hàng
-//                            }
-//                        });
-//            }
-//        });
-
-        btAddToCart = findViewById(R.id.btThemVaoGioHang);
-        btAddToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                String voucherName = tvVoucherName.getText().toString();
-//                int discountPrice = Integer.parseInt(tvDiscountPrice.getText().toString());
-//                int price = Integer.parseInt(tvPrice.getText().toString());
-//                int quantity = 1;
-//                int Total = (quantity * discountPrice);
-//
-//
-//                db = FirebaseFirestore.getInstance();
-//                Map<String, Object> cartItem = new HashMap<>();
-//                cartItem.put("voucherName", voucherName);
-//                cartItem.put("discountPrice", discountPrice);
-//                cartItem.put("price", price);
-//                cartItem.put("quantity", quantity);
-//                cartItem.put("ToTal",Total);
-//                cartItem.put("HinhAnh", hinhanh);
-//                db.collection("cartItems").add(cartItem)
-//                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                            @Override
-//                            public void onSuccess(DocumentReference documentReference) {
-//                                // Tạo một item mới từ dữ liệu được thêm vào Firestore
-//                                ItemCart itemCart = new ItemCart("",voucherName, discountPrice, price, quantity,Total,hinhanh);
-//                                // Gọi phương thức addItemToCart trong CartFragment để cập nhật RecyclerView
+//                                // Thêm item vào giỏ hàng trong CartFragment và cập nhật RecyclerView
 //                                CartFragment cartFragment = (CartFragment) getSupportFragmentManager().findFragmentById(R.id.framelayourCart);
 //                                if (cartFragment != null) {
 //                                    cartFragment.addItemToCart(itemCart);
 //                                }
-//                                AlertDialog.Builder builder = new AlertDialog.Builder(ThongTinVoucherActivity.this);
-//                                builder.setTitle("Thành công");
-//                                builder.setMessage("Đã thêm vào giỏ hàng");
-//                                builder.setPositiveButton("OK", null);
-//                                AlertDialog dialog = builder.create();
-//                                dialog.show();
+//                                Toast.makeText(ThongTinVoucherActivity.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
 //                            }
 //                        })
 //                        .addOnFailureListener(new OnFailureListener() {
@@ -251,56 +301,9 @@ public class ThongTinVoucherActivity extends AppCompatActivity implements  CartF
                                 }
                             }
                         });
-            }
-        });
-        buyActivityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        // Xử lý kết quả trả về từ CartFragment (nếu cần)
-                    }
-                }
-        );
-        btBuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Lấy thông tin voucher từ giao diện
-                String voucherName = tvVoucherName.getText().toString();
-                int discountPrice = Integer.parseInt(tvDiscountPrice.getText().toString());
-                int price = Integer.parseInt(tvPrice.getText().toString());
-                int quantity = 1;
-                int ToTal = quantity * discountPrice;
-                ItemCart itemCart = new ItemCart("", voucherName, discountPrice, price, quantity,ToTal,"","");
-
-                // Thêm dữ liệu vào Firebase Firestore
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                Map<String, Object> cartItem = new HashMap<>();
-                cartItem.put("voucherName", voucherName);
-                cartItem.put("discountPrice", discountPrice);
-                cartItem.put("price", price);
-                cartItem.put("quantity", quantity);
-
-                db.collection("cartItems").add(cartItem)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                // Thêm item vào giỏ hàng trong CartFragment và cập nhật RecyclerView
-                                CartFragment cartFragment = (CartFragment) getSupportFragmentManager().findFragmentById(R.id.framelayourCart);
-                                if (cartFragment != null) {
-                                    cartFragment.addItemToCart(itemCart);
-                                }
-                                Toast.makeText(ThongTinVoucherActivity.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Xử lý khi có lỗi xảy ra khi lưu thông tin món hàng
-                            }
-                        });
                 CartFragment cartFragment = new CartFragment();
                 Bundle bundle = new Bundle();
+                Serializable itemCart = null;
                 bundle.putSerializable("itemCart", itemCart);
                 cartFragment.setArguments(bundle);
 

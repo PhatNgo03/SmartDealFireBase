@@ -45,7 +45,7 @@
                 >
 
                 <EditText
-                    android:id="@+id/edtEmail"
+                    android:id="@+id/edtEmailLogin"
                     android:layout_width="253dp"
                     android:layout_height="31dp"
                     android:layout_gravity="center"
@@ -56,7 +56,7 @@
 
                     />
                 <EditText
-                    android:id="@+id/edtMK"
+                    android:id="@+id/edtMKLogin"
                     android:layout_width="253dp"
                     android:layout_height="31dp"
                     android:layout_gravity="center"

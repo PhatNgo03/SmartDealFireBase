@@ -2,6 +2,7 @@ package com.example.smartdealfirebase.Fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.smartdealfirebase.Adapter.CartAdapter;
+import com.example.smartdealfirebase.DangNhapActivity;
 import com.example.smartdealfirebase.Model.ItemCart;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -174,6 +176,15 @@ public class CartFragment extends Fragment {
         builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+//                if (firebaseUser == null) {
+//                    // User is not logged in, show the login dialog
+//                    showLoginDialog();
+//                } else {
+//                    // User is already logged in, proceed with the purchase
+//                    navigateToInvoiceFragmentTest(itemCart);
+//                    cartAdapter.notifyDataSetChanged();
+//                    getUserInfoFromFirestore(itemCart);
+//                }
 
                 navigateToInvoiceFragmentTest(itemCart);
                 cartAdapter.notifyDataSetChanged();
@@ -184,6 +195,12 @@ public class CartFragment extends Fragment {
         builder.setNegativeButton("Hủy", null);
         builder.show();
     }
+
+//    private void showLoginDialog() {
+//        Intent loginIntent = new Intent(requireContext(), DangNhapActivity.class);
+//        startActivity(loginIntent);
+//    }
+
     private String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());

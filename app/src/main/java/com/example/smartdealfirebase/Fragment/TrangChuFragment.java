@@ -208,6 +208,9 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
     public void setOnInfoClick(Voucher voucher) {
         Intent intent = new Intent(getContext(), ThongTinVoucherActivity.class);
         intent.putExtra("ThongTinVoucher",voucher);
+       // Bundle b = new Bundle();
+//        b.putString("imgcurrent", voucher.getHinhvc());
+
         startActivity(intent);
     }
 }

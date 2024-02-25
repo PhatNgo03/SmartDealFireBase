@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.smartdealfirebase.Fragment.CartFragment;
+import com.example.smartdealfirebase.Fragment.DanhMucFragment;
 import com.example.smartdealfirebase.Fragment.OrderFragment;
 import com.example.smartdealfirebase.Fragment.TaiKhoanFragment;
 import com.example.smartdealfirebase.Fragment.TrangChuFragment;
@@ -49,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnOr
                 fragment = new TrangChuFragment();
                 break;
             case R.id.category:
-//                fragment = new DichVuFragment();
-//                break;
+                fragment = new DanhMucFragment();
+                break;
             case R.id.cart:
                     fragment = new CartFragment();
                     break;

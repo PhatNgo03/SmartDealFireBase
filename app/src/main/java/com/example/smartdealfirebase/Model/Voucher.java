@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Voucher implements Serializable {
 
+    private Object _id;
     private String maVoucher;
     private String voucherName;
     private int discountPrice;
@@ -13,6 +14,33 @@ public class Voucher implements Serializable {
     private int slnguoimua;
     private String hinhvc;
 
+
+    public Object get_id() {
+        return _id;
+    }
+
+    public void set_id(Object _id) {
+        this._id = _id;
+    }
+
+    public Voucher() {
+    }
+
+    public Voucher(Object _id) {
+        this._id = _id;
+    }
+
+    public Voucher(Object _id, String maVoucher, String voucherName, int discountPrice, int price, String moTa, String danhMuc, int slnguoimua, String hinhvc) {
+        this._id = _id;
+        this.maVoucher = maVoucher;
+        this.voucherName = voucherName;
+        this.discountPrice = discountPrice;
+        Price = price;
+        this.moTa = moTa;
+        DanhMuc = danhMuc;
+        this.slnguoimua = slnguoimua;
+        this.hinhvc = hinhvc;
+    }
 
     public Voucher(String maVoucher, String voucherName, int discountPrice, int price, String moTa, String DanhMuc, int slnguoimua, String hinhvc) {
         this.maVoucher = maVoucher;

@@ -4,30 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".Admin.NhaCungCapActivity">
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:background="@color/white"
-        android:id="@+id/bnv"
-        app:menu="@menu/bottom_navi"
-        android:layout_width="0dp"
-        app:itemIconTint="@drawable/selectbtn"
-        app:itemTextColor="@drawable/selectbtn"
-        android:layout_height="wrap_content"
+        android:id="@+id/bnvNCC"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/menunhacc"
         app:layout_constraintStart_toStartOf="parent" />
-
     <FrameLayout
-        android:id="@+id/frContent"
+        android:id="@+id/frameNhaCungCap"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bnv"
+        app:layout_constraintBottom_toTopOf="@+id/bnvNCC"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

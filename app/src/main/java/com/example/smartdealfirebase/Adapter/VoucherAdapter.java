@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,15 +53,19 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherV
         StorageReference storageRef = storage.getReference();
         int targerWidth = 186;
         int targetHeight = 114;
-        StorageReference imamgeRef = storageRef.child(String.valueOf(voucher.getHinhvc()));
-        imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap,targerWidth,targetHeight,false);
-                holder.ivVoucherImage.setImageBitmap(resizeBitMap);
-            }
-        });
+
+        Glide.with(holder.itemView.getContext()).load(Uri.parse(voucher.getHinhvc())).into(holder.ivVoucherImage);
+
+//        StorageReference imamgeRef = storageRef.child(String.valueOf(voucher.getHinhvc()));
+//        imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap,targerWidth,targetHeight,false);
+//                holder.ivVoucherImage.setImageBitmap(resizeBitMap);
+//
+//            }
+//        });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
