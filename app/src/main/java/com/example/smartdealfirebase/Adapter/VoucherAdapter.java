@@ -50,22 +50,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherV
         holder.tvDiscountPrice.setText(String.valueOf(voucher.getDiscountPrice()));
         holder.tvslnguoimua.setText(String.valueOf(voucher.getSlnguoimua() + " " +"lượt mua"));
         holder.tvPrice.setText(String.valueOf(voucher.getPrice()));
-        StorageReference storageRef = storage.getReference();
-        int targerWidth = 186;
-        int targetHeight = 114;
-
         Glide.with(holder.itemView.getContext()).load(Uri.parse(voucher.getHinhvc())).into(holder.ivVoucherImage);
-
-//        StorageReference imamgeRef = storageRef.child(String.valueOf(voucher.getHinhvc()));
-//        imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//                Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap,targerWidth,targetHeight,false);
-//                holder.ivVoucherImage.setImageBitmap(resizeBitMap);
-//
-//            }
-//        });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

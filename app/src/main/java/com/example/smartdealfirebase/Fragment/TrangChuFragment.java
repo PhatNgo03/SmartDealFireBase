@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.example.smartdealfirebase.Adapter.VoucherAdapter;
 import com.example.smartdealfirebase.DanhMucAmThucActivity;
 import com.example.smartdealfirebase.DanhMucDuDichActivity;
 import com.example.smartdealfirebase.DanhMucSPaActivity;
+import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.R;
 import com.example.smartdealfirebase.ThongTinVoucherActivity;
@@ -93,60 +95,78 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
     //----------------
 
     TextView searchbt,tvDMAT,tvDanhMucDuLich,tvDanhMucSpa;
-    private RecyclerView rvVoucherMain;
     FirebaseFirestore db;
-    private RecyclerView rvVoucherdl;
-
-
+    private RecyclerView rvVoucherAT, rvVoucherdl;
     private VoucherAdapter voucherAdapter,voucherAdapterdl;
     private ArrayList<Voucher> vouchers,vouchersdl;
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    private ImageSlider imageSlider;
+    private Voucher voucher1;
 
-        ImageSlider imageSlider = view.findViewById(R.id.image_slider);
+    //Sử dụng Strategy pattern
+    private strategies.IVoucherStrategy iVoucherStrategy ;
+
+    private void initRecyclerViews(View view) {
+        vouchers = new ArrayList<>();
+        rvVoucherAT = view.findViewById(R.id.rvVoucherMain);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+        rvVoucherAT.setLayoutManager(layoutManager);
+        voucherAdapter = new VoucherAdapter(vouchers, this);
+        rvVoucherAT.setAdapter(voucherAdapter);
+
+        vouchersdl = new ArrayList<>();
+        rvVoucherdl = view.findViewById(R.id.rvVoucherdl);
+        LinearLayoutManager dlLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+        rvVoucherdl.setLayoutManager(dlLayoutManager);
+        voucherAdapterdl = new VoucherAdapter(vouchersdl, this);
+        rvVoucherdl.setAdapter(voucherAdapterdl);
+    }
+
+//    private void setiVoucherStrategy(){
+//        // Xác định chiến lược dựa trên loại danh mục
+//        String danhMuc = "DuLich";
+//       String danhMuc1 = "AmThuc";
+//        // Xác định chiến lược dựa trên danh mục
+//        if (danhMuc.equalsIgnoreCase("DuLich")) {
+//            iVoucherStrategy = new strategies.DuLichVoucherStrategy();
+//        } else if (danhMuc1.equalsIgnoreCase("AmThuc")) {
+//            iVoucherStrategy = new strategies.AmThucVoucherStrategy();
+//        }
+//
+//        // Khởi tạo danh sách voucher
+//        vouchers.clear();
+//
+//    }
+    // xac dinh chien luoc
+    private strategies.IVoucherStrategy getVoucherStrategy(String danhMuc) {
+        if (danhMuc.equalsIgnoreCase("DuLich")) {
+        return new strategies.DuLichVoucherStrategy();
+         }
+        else if (danhMuc.equalsIgnoreCase("AmThuc")) {
+        return new strategies.AmThucVoucherStrategy();}
+     return null;
+    }
+    private void setSlideModels() {
         ArrayList<SlideModel> slideModels = new ArrayList<>();
-        searchbt=view.findViewById(R.id.edtserchTrangChu);
-        tvDMAT=view.findViewById(R.id.tvDMAmThuc);
-        tvDanhMucDuLich = view.findViewById(R.id.tvDMDuLich);
-        tvDanhMucSpa = view.findViewById(R.id.tvDanhMucSpa);
-
         slideModels.add(new SlideModel(R.drawable.anh1, ScaleTypes.FIT));
         slideModels.add(new SlideModel(R.drawable.anh2, ScaleTypes.FIT));
         slideModels.add(new SlideModel(R.drawable.anh3, ScaleTypes.FIT));
-
-
-        tvDMAT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), DanhMucAmThucActivity.class);
-                startActivity(intent);
-            }
-        });
-        tvDanhMucDuLich.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), DanhMucDuDichActivity.class);
-                startActivity(intent);
-            }
-        });
-        tvDanhMucSpa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), DanhMucSPaActivity.class);
-                startActivity(intent);
-            }
-        });
-        searchbt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), TimKiemActivity.class);
-                startActivity(intent);
-            }
-        });
         imageSlider.setImageList(slideModels, ScaleTypes.FIT);
-        db=FirebaseFirestore.getInstance();
+    }
+    private void setCategoryClickListeners() {
+        tvDMAT.setOnClickListener(v -> startActivity(new Intent(getContext(), DanhMucAmThucActivity.class)));
+        tvDanhMucDuLich.setOnClickListener(v -> startActivity(new Intent(getContext(), DanhMucDuDichActivity.class)));
+        tvDanhMucSpa.setOnClickListener(v -> startActivity(new Intent(getContext(), DanhMucSPaActivity.class)));
+        searchbt.setOnClickListener(v -> startActivity(new Intent(getContext(), TimKiemActivity.class)));
+    }
 
+    //nhận một đối tượng Voucher làm tham số
+
+    private void loadDataFromFireStore(){
+
+        vouchers.clear();
+        vouchersdl.clear();
+
+        db=FirebaseFirestore.getInstance();
         db.collection("Voucher").orderBy("MaVoucher")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -160,14 +180,15 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
                             String Mota=document.get("MoTa").toString();
                             String DanhMuc=document.get("DanhMuc").toString();
                             String Hinh=document.get("HinhAnh").toString();
-
                             Voucher voucher = new Voucher(MaVoucher,TenVoucher,GiaGiam,GiaGoc,Mota,DanhMuc,SlNguoimua,Hinh);
-                            if (DanhMuc.equalsIgnoreCase("DuLich")) {
-//                                vouchers.clear();
-                                vouchersdl.add(voucher);
-                            } else if (DanhMuc.equalsIgnoreCase("AmThuc")) {
-//                                vouchersdl.clear();
-                                vouchers.add(voucher);
+
+                            iVoucherStrategy = getVoucherStrategy(DanhMuc);
+                            if (iVoucherStrategy != null) {
+                                if (DanhMuc.equalsIgnoreCase("DuLich")) {
+                                    iVoucherStrategy.addToVouchersList(voucher, vouchersdl);
+                                } else if (DanhMuc.equalsIgnoreCase("AmThuc")) {
+                                    iVoucherStrategy.addToVouchersList(voucher, vouchers);
+                                }
                             }
 
                         }
@@ -178,39 +199,130 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Toast.makeText(getContext(), "Lỗi !!", Toast.LENGTH_SHORT).show();
                     }
                 });
-        rvVoucherdl=view.findViewById(R.id.rvVoucherdl);
+
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        imageSlider = view.findViewById(R.id.image_slider);
+       // ArrayList<SlideModel> slideModels = new ArrayList<>();
+        searchbt=view.findViewById(R.id.edtserchTrangChu);
+        tvDMAT=view.findViewById(R.id.tvDMAmThuc);
+        tvDanhMucDuLich = view.findViewById(R.id.tvDMDuLich);
+        tvDanhMucSpa = view.findViewById(R.id.tvDanhMucSpa);
 
 
-        vouchersdl=new ArrayList<>();
-        rvVoucherdl = view.findViewById(R.id.rvVoucherdl);
-        LinearLayoutManager G = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
-        rvVoucherdl.setLayoutManager(G);
-        voucherAdapterdl=new VoucherAdapter(vouchersdl,this);
-        rvVoucherdl.setAdapter(voucherAdapterdl);
+
+//        slideModels.add(new SlideModel(R.drawable.anh1, ScaleTypes.FIT));
+//        slideModels.add(new SlideModel(R.drawable.anh2, ScaleTypes.FIT));
+//        slideModels.add(new SlideModel(R.drawable.anh3, ScaleTypes.FIT));
+//          imageSlider.setImageList(slideModels, ScaleTypes.FIT);
+
+        setSlideModels();
+        setCategoryClickListeners();
+        initRecyclerViews(view);
+
+        loadDataFromFireStore();
+
+
+//        tvDMAT.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), DanhMucAmThucActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        tvDanhMucDuLich.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), DanhMucDuDichActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        tvDanhMucSpa.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), DanhMucSPaActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        searchbt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getContext(), TimKiemActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
+
+//        db=FirebaseFirestore.getInstance();
+//        db.collection("Voucher").orderBy("MaVoucher")
+//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        for(QueryDocumentSnapshot document : task.getResult()){
+//                            String MaVoucher=document.get("MaVoucher").toString();
+//                            String TenVoucher=document.get("TenVoucher").toString();
+//                            Integer GiaGiam= Integer.parseInt(document.get("GiaGiam").toString());
+//                            Integer GiaGoc= Integer.parseInt(document.get("GiaGoc").toString());
+//                            Integer SlNguoimua=Integer.parseInt(document.get("SLNguoiMua").toString());
+//                            String Mota=document.get("MoTa").toString();
+//                            String DanhMuc=document.get("DanhMuc").toString();
+//                            String Hinh=document.get("HinhAnh").toString();
+//
+//                            Voucher voucher = new Voucher(MaVoucher,TenVoucher,GiaGiam,GiaGoc,Mota,DanhMuc,SlNguoimua,Hinh);
+//                            iVoucherStrategy.addToVouchersList(voucher,vouchers);
+////                            if (DanhMuc.equalsIgnoreCase("DuLich")) {
+//////                                vouchers.clear();
+////                                vouchersdl.add(voucher);
+////                            } else if (DanhMuc.equalsIgnoreCase("AmThuc")) {
+//////                                vouchersdl.clear();
+////                                vouchers.add(voucher);
+////                            }
+//
+//                        }
+//                        voucherAdapter.notifyDataSetChanged();
+//                        voucherAdapterdl.notifyDataSetChanged();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//
+//                    }
+//                });
 
 
 
-        vouchers = new ArrayList<>();
-        rvVoucherMain =view.findViewById(R.id.rvVoucherMain);
-        LinearLayoutManager l = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
-        rvVoucherMain.setLayoutManager(l);
-        voucherAdapter = new VoucherAdapter((List<Voucher>) vouchers,this);
-        rvVoucherMain.setAdapter(voucherAdapter);
+//        vouchersdl=new ArrayList<>();
+//        rvVoucherdl = view.findViewById(R.id.rvVoucherdl);
+//        LinearLayoutManager G = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
+//        rvVoucherdl.setLayoutManager(G);
+//        voucherAdapterdl=new VoucherAdapter(vouchersdl,this);
+//        rvVoucherdl.setAdapter(voucherAdapterdl);
+
+
+
+//        vouchers = new ArrayList<>();
+//        rvVoucherAT =view.findViewById(R.id.rvVoucherMain);
+//        LinearLayoutManager l = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
+//        rvVoucherAT.setLayoutManager(l);
+//        voucherAdapter = new VoucherAdapter((List<Voucher>) vouchers,this);
+//        rvVoucherAT.setAdapter(voucherAdapter);
 
         //khoi tao va mo d
 
         }
 
+
     @Override
     public void setOnInfoClick(Voucher voucher) {
         Intent intent = new Intent(getContext(), ThongTinVoucherActivity.class);
         intent.putExtra("ThongTinVoucher",voucher);
-       // Bundle b = new Bundle();
-//        b.putString("imgcurrent", voucher.getHinhvc());
-
         startActivity(intent);
     }
 }

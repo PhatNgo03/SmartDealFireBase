@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.smartdealfirebase.Adapter.VoucherAdapter;
-import com.example.smartdealfirebase.Adapter.VoucherAmThucAdapter;
+import com.example.smartdealfirebase.Adapter.VoucherCategoryAdapter;
+import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,18 +20,18 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class DanhMucAmThucActivity extends AppCompatActivity implements VoucherAmThucAdapter.Listener {
+public class DanhMucAmThucActivity extends AppCompatActivity implements VoucherCategoryAdapter.Listener {
 
     RecyclerView recyclerViewAmThuc;
 
-    VoucherAmThucAdapter voucherAdapterAmThuc;
+    VoucherCategoryAdapter voucherAdapterAmThuc;
 
     ArrayList<Voucher> vouchersAmThuc;
 
     FirebaseFirestore db;
 
+    private strategies.IVoucherStrategy iVoucherStrategy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +39,11 @@ public class DanhMucAmThucActivity extends AppCompatActivity implements VoucherA
 
         recyclerViewAmThuc=findViewById(R.id.rvdmat);
         vouchersAmThuc=new ArrayList<>();
-        voucherAdapterAmThuc=new VoucherAmThucAdapter(vouchersAmThuc,this);
+        voucherAdapterAmThuc=new VoucherCategoryAdapter(vouchersAmThuc,this);
         db=FirebaseFirestore.getInstance();
+
+        // Sử dụng Strategy cho việc thêm các voucher vào danh sách ( chiến lược AmThucVoucherStrategy)
+        iVoucherStrategy = new strategies.AmThucVoucherStrategy();
         db.collection("Voucher").orderBy("MaVoucher")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -56,10 +59,8 @@ public class DanhMucAmThucActivity extends AppCompatActivity implements VoucherA
                             String Hinh=document.get("HinhAnh").toString();
 
                             Voucher voucher = new Voucher(MaVoucher,TenVoucher,GiaGiam,GiaGoc,Mota,DanhMuc,SlNguoimua,Hinh);
-                            if (DanhMuc.equalsIgnoreCase("AmThuc")) {
-//                                vouchers.clear();
-                                vouchersAmThuc.add(voucher);}
-
+                            // Thêm voucher vào danh sách sử dụng chiến lược
+                            iVoucherStrategy.addToVouchersList(voucher, vouchersAmThuc);
 
                         }
                         voucherAdapterAmThuc.notifyDataSetChanged();

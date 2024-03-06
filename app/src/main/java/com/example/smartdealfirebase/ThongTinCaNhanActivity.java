@@ -110,14 +110,61 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchUserInfoFromFirestore() {
-        DocumentReference docRef = db.collection("KhachHang").document(userEmail);
+//    private void fetchUserInfoFromFirestore() {
+//        DocumentReference docRef = db.collection("KhachHang").document(userEmail);
+//
+//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                if (documentSnapshot.exists()) {
+//                    // Document exists, retrieve data
+//                    String hoten = documentSnapshot.getString("HoTen");
+//                    String ngaysinh = documentSnapshot.getString("NgaySinh");
+//                    String diachi = documentSnapshot.getString("DiaChi");
+//                    String sdt = documentSnapshot.getString("SDT");
+//                    String gioiTinh = documentSnapshot.getString("GioiTinh");
+//                    int gioiTinhIndex = gioiTinhAdapter.getPosition(String.valueOf(gioiTinh));
+//                    spinnerGioiTinh.setSelection(gioiTinhIndex);
+//                    // Set the fetched data to the EditText fields
+//                    edten.setText(hoten);
+//                    mngaysinh.setText(ngaysinh);
+//                    spinnerGioiTinh.setTag(gioiTinh);
+//                    mdiachi.setText(diachi);
+//                    mSDT.setText(sdt);
+//                    memail.setText(userEmail);
+//                    memail.setEnabled(false);
+//                } else {
+//                    // Document does not exist, leave EditText fields empty
+//                    memail.setText("");
+//
+//                }
+//            }
+//        });
+//    }
+private void fetchUserInfoFromFirestore() {
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    if (user != null) {
+        String userUID = user.getUid(); // Lấy UID của người dùng hiện tại
+        String userEmail = user.getEmail(); // Lấy email của người dùng hiện tại
+        String userPhoneNumber = user.getPhoneNumber(); // Lấy số điện thoại của người dùng hiện tại
+
+        DocumentReference docRef;
+        if (userPhoneNumber != null) {
+            // Trường hợp đăng nhập bằng số điện thoại, sử dụng số điện thoại để truy vấn Firestore
+            docRef = db.collection("KhachHang").document(userPhoneNumber);
+        } else if (userEmail != null) {
+            // Trường hợp đăng nhập bằng email, sử dụng email để truy vấn Firestore
+            docRef = db.collection("KhachHang").document(userEmail);
+        } else {
+            // Xử lý khi không thể lấy được số điện thoại hoặc email của người dùng
+            return;
+        }
 
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
-                    // Document exists, retrieve data
+                    // Xử lý khi tài liệu tồn tại
                     String hoten = documentSnapshot.getString("HoTen");
                     String ngaysinh = documentSnapshot.getString("NgaySinh");
                     String diachi = documentSnapshot.getString("DiaChi");
@@ -131,54 +178,33 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
                     spinnerGioiTinh.setTag(gioiTinh);
                     mdiachi.setText(diachi);
                     mSDT.setText(sdt);
-                    memail.setText(userEmail);
-                    memail.setEnabled(false);
+                    if (userEmail != null) {
+                        memail.setText(userEmail);
+                        memail.setEnabled(false);
+                    }
                 } else {
-                    // Document does not exist, leave EditText fields empty
-                    memail.setText("");
-
+                    // Xử lý khi tài liệu không tồn tại
+                    if (userEmail != null) {
+                        memail.setText(userEmail);
+                    }
                 }
             }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Xử lý khi truy vấn thất bại
+                Toast.makeText(ThongTinCaNhanActivity.this, "Failed to fetch user information. Please try again.", Toast.LENGTH_SHORT).show();
+            }
         });
+    } else {
+        // Xử lý khi người dùng không đăng nhập
+        startActivity(new Intent(ThongTinCaNhanActivity.this, DangNhapActivity.class));
+        finish();
     }
+}
 
-//    private void updateUserInfoInFirestore() {
-//        // Get the updated user information from EditText fields
-//        String hoten = edten.getText().toString();
-//        String ngaysinh = mngaysinh.getText().toString();
-//        String gioitinh = spinnerGioiTinh.getSelectedItem().toString();
-//        String diachi = mdiachi.getText().toString();
-//        String sdt = mSDT.getText().toString();
-//
-//
-//        if (sdt.length() < 8 || sdt.length() > 10) {
-//           showError(mSDT,"Số điện thoại phải có từ 8 đến 10 ký tự.");
-//            return;
-//        }
-//        // Create a map to hold the user information
-//        Map<String, Object> userMap = new HashMap<>();
-//        userMap.put("HoTen", hoten);
-//        userMap.put("NgaySinh", ngaysinh);
-//        userMap.put("GioiTinh", gioitinh);
-//        userMap.put("DiaChi", diachi);
-//        userMap.put("SDT", sdt);
-//
-//        // Update the user information in Firestore
-//        db.collection("KhachHang").document(userEmail)
-//                .set(userMap)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void unused) {
-//                        Toast.makeText(ThongTinCaNhanActivity.this, "User information updated successfully.", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(ThongTinCaNhanActivity.this, "Failed to update user information. Please try again.", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
+
+
 
     private void updateUserInfoInFirestore() {
         // Get the updated user information from EditText fields

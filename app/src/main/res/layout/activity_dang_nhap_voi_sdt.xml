@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".DangNhapActivity">
+    tools:context=".DesignPatternFactoryMethod.DangNhapVoiSDT">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             ></ImageView>
         <TableLayout
             android:layout_width="300dp"
-            android:layout_height="330dp"
+            android:layout_height="280dp"
             android:layout_gravity="center"
             android:elevation="8dp">
 
@@ -45,74 +45,48 @@
                 >
 
                 <EditText
-                    android:id="@+id/edtEmailLogin"
+                    android:id="@+id/edtPhoneNumber"
                     android:layout_width="253dp"
                     android:layout_height="31dp"
                     android:layout_gravity="center"
                     android:background="@drawable/vienlogin"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="25dp"
                     android:paddingLeft="10dp"
-                    android:hint="Email"
+                    android:hint="Số điện thoại"
+                    android:inputType="phone" />
 
-                    />
                 <EditText
-                    android:id="@+id/edtMKLogin"
+                    android:id="@+id/edtVerificationCode"
                     android:layout_width="253dp"
                     android:layout_height="31dp"
                     android:layout_gravity="center"
-                    android:inputType="textPassword"
                     android:background="@drawable/vienlogin"
                     android:layout_marginTop="20dp"
                     android:paddingLeft="10dp"
-                    android:hint="Mật khẩu"
-
-                    />
-                <TextView
-                    android:layout_width="253dp"
-                    android:layout_height="31dp"
-                    android:text="Quên Mật Khẩu...?"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="21dp"
-                    android:layout_marginLeft="22dp"
-                    />
+                    android:hint="Mã xác minh"
+                    android:inputType="number" />
 
                 <Button
-                    android:id="@+id/btdangnhap"
-                    android:layout_width="130dp"
-                    android:layout_height="37dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/vienlogin"
-                    android:text="ĐĂNG NHẬP"
-                    android:textAllCaps="false">
-                </Button>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Chưa có tài khoản"
-                    android:textSize="10dp"
-                    android:textColor="#787676"
-                    android:layout_gravity="center"/>
-                <TextView
-                    android:id="@+id/tvdangky"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Đăng ký"
-                    android:textSize="15sp"
-                    android:layout_gravity="center"
-                    android:textColor="@color/black"/>
-                <Button
-                    android:id="@+id/btDangNhapVoiSDT"
-                    android:layout_width="130dp"
-                    android:layout_height="37dp"
+                    android:id="@+id/btnYeuCauVerifyCode"
+                    android:layout_width="150dp"
+                    android:layout_height="36dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/vienlogin"
-                    android:text="Đăng nhập với số điện thoại"
-                    android:textAllCaps="false">
-                </Button>
+                    android:text="Yêu cầu mã xác minh"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btnXacMinhVerifyCode"
+                    android:layout_width="122dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/vienlogin"
+                    android:text="Xác minh mã"
+                    android:textAllCaps="false"/>
+
+
 
             </LinearLayout>
         </TableLayout>
