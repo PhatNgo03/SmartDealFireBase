@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
 
-                    android:text="Dịa chỉ"
+                    android:text="Địa chỉ"
                     android:textSize="17dp"
                     android:textStyle="bold" />
 

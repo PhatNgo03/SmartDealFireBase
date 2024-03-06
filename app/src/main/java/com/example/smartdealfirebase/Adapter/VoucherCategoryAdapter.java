@@ -1,9 +1,8 @@
 package com.example.smartdealfirebase.Adapter;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +12,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
-public class VoucherSpaAdapter extends RecyclerView.Adapter<VoucherSpaAdapter.VoucherVH>{
+public class VoucherCategoryAdapter extends RecyclerView.Adapter<VoucherCategoryAdapter.VoucherVH> {
+
     private List<Voucher> vouchers;
 
-    Listener listener;
+   Listener listener;
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    public VoucherSpaAdapter(List<Voucher> vouchers, Listener listener) {
+    public VoucherCategoryAdapter(List<Voucher> vouchers, Listener listener) {
         this.vouchers = vouchers;
         this.listener = listener;
     }
@@ -37,28 +36,17 @@ public class VoucherSpaAdapter extends RecyclerView.Adapter<VoucherSpaAdapter.Vo
     public VoucherVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_voucheramthuc, parent, false);
-        return new VoucherSpaAdapter.VoucherVH(itemView);
+        return new VoucherCategoryAdapter.VoucherVH(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VoucherVH holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull VoucherVH holder,@SuppressLint("RecyclerView") int position) {
         Voucher voucher = vouchers.get(position);
         holder.tvVoucherName.setText(voucher.getVoucherName());
         holder.tvDiscountPrice.setText(String.valueOf(voucher.getDiscountPrice()));
         holder.tvslnguoimua.setText(String.valueOf(voucher.getSlnguoimua() + " " +"lượt mua"));
         holder.tvPrice.setText(String.valueOf(voucher.getPrice()));
-        StorageReference storageRef = storage.getReference();
-        int targerWidth = 290;
-        int targetHeight = 150;
-        StorageReference imamgeRef = storageRef.child(String.valueOf(voucher.getHinhvc()));
-        imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap,targerWidth,targetHeight,false);
-                holder.ivVoucherImage.setImageBitmap(resizeBitMap);
-            }
-        });
+        Glide.with(holder.itemView.getContext()).load(Uri.parse(voucher.getHinhvc())).into(holder.ivVoucherImage);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +78,6 @@ public class VoucherSpaAdapter extends RecyclerView.Adapter<VoucherSpaAdapter.Vo
         }
     }
     public interface Listener {
-        void setOnInfoClick(Voucher voucher3);
+        void setOnInfoClick(Voucher voucher1);
     }
 }

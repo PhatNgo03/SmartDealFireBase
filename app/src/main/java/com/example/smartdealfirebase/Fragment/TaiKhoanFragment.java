@@ -131,8 +131,8 @@ public class TaiKhoanFragment extends Fragment {
                     // Set the email to the email TextView
                     tvemail.setText(email);
                 } else {
-                    tvemail.setText("Document không tồn tại");
-                    tvten.setText("Họ và tên không có trong Firestore");
+                    tvemail.setText("Người Dùng");
+                    tvten.setText("Nguời dùng");
                 }
             }).addOnFailureListener(e -> {
                 tvemail.setText("Lỗi khi lấy dữ liệu từ Firestore");
