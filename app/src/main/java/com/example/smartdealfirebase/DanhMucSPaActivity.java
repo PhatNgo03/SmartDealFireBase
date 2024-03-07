@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.smartdealfirebase.Adapter.VoucherCategoryAdapter;
+import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
 import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,7 +28,8 @@ public class DanhMucSPaActivity extends AppCompatActivity implements VoucherCate
     VoucherCategoryAdapter voucherSpaAdapter;
 
     ArrayList<Voucher> vouchersSpa;
-    FirebaseFirestore db;
+    private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
+    private FirebaseFirestore firestore;
 
     private strategies.IVoucherStrategy iVoucherStrategy;
     @Override
@@ -38,11 +40,13 @@ public class DanhMucSPaActivity extends AppCompatActivity implements VoucherCate
         rvDanhMucSpa=findViewById(R.id.rvDanhMucSpa);
         vouchersSpa =new ArrayList<>();
         voucherSpaAdapter=new VoucherCategoryAdapter( vouchersSpa,this);
-        db=FirebaseFirestore.getInstance();
+
+        fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
+        firestore = fireBaseFireStoreSingleton.getFirestore();
 
         // Sử dụng Strategy cho việc thêm các voucher vào danh sách ( chiến lược VoucherSpaStrategy)
         iVoucherStrategy = new strategies.VoucherSpaStrategy();
-        db.collection("Voucher").orderBy("MaVoucher")
+        firestore.collection("Voucher").orderBy("MaVoucher")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.smartdealfirebase.DangNhapActivity;
+import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,6 +31,7 @@ public class DangKiActivity extends AppCompatActivity {
     Button btdangKiWithEmail;
     private FirebaseAuth mAuth;
 
+    private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
     private FirebaseFirestore firestore;
 
 
@@ -46,20 +48,11 @@ public class DangKiActivity extends AppCompatActivity {
         }
     }
 
-    // Triển khai Factory Method cho đăng ký qua số điện thoại
-    class PhoneRegistrationFactory implements RegistrationFactory {
-        @Override
-        public Registration createRegistration() {
-            return new PhoneRegistration();
-        }
-    }
     // Tạo Interface cho đối tượng đăng ký ( product) //  Đ/N 1 interface cho các DTuong mà Factory sẽ tạo ra.
     interface Registration {
         void register(); // hành động cần thực hiện để đăng kí
     }
-
-
-    // ConcreteProduc : Lớp cụ thể để thực hiện việc đăng kí
+    // ConcreteProduct: Lớp cụ thể để thực hiện việc đăng kí
     class EmailRegistration implements Registration {
         @Override
         public void register() {
@@ -128,19 +121,14 @@ public class DangKiActivity extends AppCompatActivity {
                     });
         }
     }
-    class PhoneRegistration implements Registration {
-        @Override
-        public void register() {
-
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dang_ki);
         mAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
+        fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
+        firestore = fireBaseFireStoreSingleton.getFirestore();
         edtEmailDki = findViewById(R.id.edtEmailDki);
         edtPasworDK = findViewById(R.id.edtMKDki);
         edtPrePass = findViewById(R.id.edtnhaplaiMKdki);

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
 import com.example.smartdealfirebase.MainActivity;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,7 +35,9 @@ public class DangNhapVoiSDT extends AppCompatActivity {
     EditText edtSdt, edtCodeVerify;
     Button btnYeuCauVerifyCode, btnXacNhanMaCode;
     private FirebaseAuth mAuth;
+
     private FirebaseFirestore firestore;
+    private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
 
 
     // Tạo interface cho Factory Method
@@ -63,6 +66,8 @@ public class DangNhapVoiSDT extends AppCompatActivity {
         public PhoneLogging(Context context) {
             this.context = context;
             mAuth = FirebaseAuth.getInstance();
+            fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
+            firestore = fireBaseFireStoreSingleton.getFirestore();
         }
         @Override
         public void requestVerificationCode(String phoneNumber) {
@@ -118,7 +123,6 @@ public class DangNhapVoiSDT extends AppCompatActivity {
         }
 
         private void saveUserInfo(FirebaseUser user, String verificationId) {
-            firestore = FirebaseFirestore.getInstance();
             DocumentReference userRef = firestore.collection("NguoiDungPhone").document(user.getUid());
             Map<String, Object> userData = new HashMap<>();
             userData.put("Phone", user.getPhoneNumber());
