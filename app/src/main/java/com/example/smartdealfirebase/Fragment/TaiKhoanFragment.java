@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.smartdealfirebase.DangNhapActivity;
+import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
 import com.example.smartdealfirebase.LichSuMuaHang;
 import com.example.smartdealfirebase.R;
 import com.example.smartdealfirebase.ThongTinCaNhanActivity;
@@ -86,7 +87,9 @@ public class TaiKhoanFragment extends Fragment {
 
     TextView tvten,tvemail,tvdangxuat,tvttcn,tvLsMuaHang;
 
-    FirebaseFirestore db;
+    FireBaseFireStoreSingleton fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
+    FirebaseFirestore db = fireBaseFireStoreSingleton.getFirestore();
+
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
 
@@ -100,7 +103,6 @@ public class TaiKhoanFragment extends Fragment {
         tvten=view.findViewById(R.id.tvten);
         tvemail=view.findViewById(R.id.tvemail);
         firebaseAuth=FirebaseAuth.getInstance();
-        db=FirebaseFirestore.getInstance();
         tvdangxuat=view.findViewById(R.id.btndangxuat);
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
@@ -131,8 +133,8 @@ public class TaiKhoanFragment extends Fragment {
                     // Set the email to the email TextView
                     tvemail.setText(email);
                 } else {
-                    tvemail.setText("Document không tồn tại");
-                    tvten.setText("Họ và tên không có trong Firestore");
+                    tvemail.setText("Người Dùng");
+                    tvten.setText("Nguời dùng");
                 }
             }).addOnFailureListener(e -> {
                 tvemail.setText("Lỗi khi lấy dữ liệu từ Firestore");

@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.smartdealfirebase.Adapter.VoucherDuLichAdapter;
-import com.example.smartdealfirebase.Adapter.VoucherSpaAdapter;
+import com.example.smartdealfirebase.Adapter.VoucherCategoryAdapter;
+import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
+import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,14 +22,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class DanhMucSPaActivity extends AppCompatActivity implements VoucherSpaAdapter.Listener {
+public class DanhMucSPaActivity extends AppCompatActivity implements VoucherCategoryAdapter.Listener {
     RecyclerView rvDanhMucSpa;
 
-    VoucherSpaAdapter voucherSpaAdapter;
+    VoucherCategoryAdapter voucherSpaAdapter;
 
     ArrayList<Voucher> vouchersSpa;
+    private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
+    private FirebaseFirestore firestore;
 
-    FirebaseFirestore db;
+    private strategies.IVoucherStrategy iVoucherStrategy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +39,14 @@ public class DanhMucSPaActivity extends AppCompatActivity implements VoucherSpaA
 
         rvDanhMucSpa=findViewById(R.id.rvDanhMucSpa);
         vouchersSpa =new ArrayList<>();
-        voucherSpaAdapter=new VoucherSpaAdapter( vouchersSpa,this);
-        db=FirebaseFirestore.getInstance();
-        db.collection("Voucher").orderBy("MaVoucher")
+        voucherSpaAdapter=new VoucherCategoryAdapter( vouchersSpa,this);
+
+        fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
+        firestore = fireBaseFireStoreSingleton.getFirestore();
+
+        // Sử dụng Strategy cho việc thêm các voucher vào danh sách ( chiến lược VoucherSpaStrategy)
+        iVoucherStrategy = new strategies.VoucherSpaStrategy();
+        firestore.collection("Voucher").orderBy("MaVoucher")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -53,9 +61,8 @@ public class DanhMucSPaActivity extends AppCompatActivity implements VoucherSpaA
                             String Hinh=document.get("HinhAnh").toString();
 
                             Voucher voucher = new Voucher(MaVoucher,TenVoucher,GiaGiam,GiaGoc,Mota,DanhMuc,SlNguoimua,Hinh);
-                            if (DanhMuc.equalsIgnoreCase("Spa")) {
-//                                vouchers.clear();
-                                vouchersSpa.add(voucher);}
+
+                            iVoucherStrategy.addToVouchersList(voucher,vouchersSpa);
 
 
                         }

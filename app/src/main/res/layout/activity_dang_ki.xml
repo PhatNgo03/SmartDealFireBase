@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".DangNhapActivity">
+    tools:context=".DesignPatternFactoryMethod.DangKiActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -81,13 +81,15 @@
                     />
 
                 <Button
-                    android:id="@+id/btdangky"
-                    android:layout_width="122dp"
+                    android:id="@+id/btdangkywithEmail"
+                    android:layout_width="150dp"
                     android:layout_height="36dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/vienlogin"
-                    android:text="ĐĂNG KÝ">
+                    android:text="Đăng ký Với Email"
+                    android:textAllCaps="false">
+
                 </Button>
 
             </LinearLayout>
