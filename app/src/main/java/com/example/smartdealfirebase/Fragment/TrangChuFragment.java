@@ -21,6 +21,7 @@ import com.example.smartdealfirebase.Adapter.VoucherAdapter;
 import com.example.smartdealfirebase.DanhMucAmThucActivity;
 import com.example.smartdealfirebase.DanhMucDuDichActivity;
 import com.example.smartdealfirebase.DanhMucSPaActivity;
+import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
 import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.R;
@@ -70,11 +71,9 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
         fragment.setArguments(args);
         return fragment;
     }
-
     public TrangChuFragment() {
         // Required empty public constructor
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,19 +82,15 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_trang_chu, container, false);
     }
-
-
     //----------------
 
     TextView searchbt,tvDMAT,tvDanhMucDuLich,tvDanhMucSpa;
-    FirebaseFirestore db;
     private RecyclerView rvVoucherAT, rvVoucherdl;
     private VoucherAdapter voucherAdapter,voucherAdapterdl;
     private ArrayList<Voucher> vouchers,vouchersdl;
@@ -104,6 +99,9 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
 
     //Sử dụng Strategy pattern
     private strategies.IVoucherStrategy iVoucherStrategy ;
+
+    //Khai báo đối tượng singleton
+    private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
 
     private void initRecyclerViews(View view) {
         vouchers = new ArrayList<>();
@@ -120,22 +118,6 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
         voucherAdapterdl = new VoucherAdapter(vouchersdl, this);
         rvVoucherdl.setAdapter(voucherAdapterdl);
     }
-
-//    private void setiVoucherStrategy(){
-//        // Xác định chiến lược dựa trên loại danh mục
-//        String danhMuc = "DuLich";
-//       String danhMuc1 = "AmThuc";
-//        // Xác định chiến lược dựa trên danh mục
-//        if (danhMuc.equalsIgnoreCase("DuLich")) {
-//            iVoucherStrategy = new strategies.DuLichVoucherStrategy();
-//        } else if (danhMuc1.equalsIgnoreCase("AmThuc")) {
-//            iVoucherStrategy = new strategies.AmThucVoucherStrategy();
-//        }
-//
-//        // Khởi tạo danh sách voucher
-//        vouchers.clear();
-//
-//    }
     // xac dinh chien luoc
     private strategies.IVoucherStrategy getVoucherStrategy(String danhMuc) {
         if (danhMuc.equalsIgnoreCase("DuLich")) {
@@ -165,9 +147,9 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
 
         vouchers.clear();
         vouchersdl.clear();
-
-        db=FirebaseFirestore.getInstance();
-        db.collection("Voucher").orderBy("MaVoucher")
+        // Sử dụng singleton để lấy FireBaseFirestore
+        FirebaseFirestore firestore = fireBaseFireStoreSingleton.getInstance().getFirestore();
+        firestore.collection("Voucher").orderBy("MaVoucher")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -207,118 +189,18 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        // Khởi tạo FirestoreClientSingleton tránh bị null excep
+        fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
         imageSlider = view.findViewById(R.id.image_slider);
-       // ArrayList<SlideModel> slideModels = new ArrayList<>();
         searchbt=view.findViewById(R.id.edtserchTrangChu);
         tvDMAT=view.findViewById(R.id.tvDMAmThuc);
         tvDanhMucDuLich = view.findViewById(R.id.tvDMDuLich);
         tvDanhMucSpa = view.findViewById(R.id.tvDanhMucSpa);
-
-
-
-//        slideModels.add(new SlideModel(R.drawable.anh1, ScaleTypes.FIT));
-//        slideModels.add(new SlideModel(R.drawable.anh2, ScaleTypes.FIT));
-//        slideModels.add(new SlideModel(R.drawable.anh3, ScaleTypes.FIT));
-//          imageSlider.setImageList(slideModels, ScaleTypes.FIT);
-
         setSlideModels();
         setCategoryClickListeners();
         initRecyclerViews(view);
-
         loadDataFromFireStore();
-
-
-//        tvDMAT.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), DanhMucAmThucActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//        tvDanhMucDuLich.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), DanhMucDuDichActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//        tvDanhMucSpa.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), DanhMucSPaActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//        searchbt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getContext(), TimKiemActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-
-//        db=FirebaseFirestore.getInstance();
-//        db.collection("Voucher").orderBy("MaVoucher")
-//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        for(QueryDocumentSnapshot document : task.getResult()){
-//                            String MaVoucher=document.get("MaVoucher").toString();
-//                            String TenVoucher=document.get("TenVoucher").toString();
-//                            Integer GiaGiam= Integer.parseInt(document.get("GiaGiam").toString());
-//                            Integer GiaGoc= Integer.parseInt(document.get("GiaGoc").toString());
-//                            Integer SlNguoimua=Integer.parseInt(document.get("SLNguoiMua").toString());
-//                            String Mota=document.get("MoTa").toString();
-//                            String DanhMuc=document.get("DanhMuc").toString();
-//                            String Hinh=document.get("HinhAnh").toString();
-//
-//                            Voucher voucher = new Voucher(MaVoucher,TenVoucher,GiaGiam,GiaGoc,Mota,DanhMuc,SlNguoimua,Hinh);
-//                            iVoucherStrategy.addToVouchersList(voucher,vouchers);
-////                            if (DanhMuc.equalsIgnoreCase("DuLich")) {
-//////                                vouchers.clear();
-////                                vouchersdl.add(voucher);
-////                            } else if (DanhMuc.equalsIgnoreCase("AmThuc")) {
-//////                                vouchersdl.clear();
-////                                vouchers.add(voucher);
-////                            }
-//
-//                        }
-//                        voucherAdapter.notifyDataSetChanged();
-//                        voucherAdapterdl.notifyDataSetChanged();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//
-//                    }
-//                });
-
-
-
-//        vouchersdl=new ArrayList<>();
-//        rvVoucherdl = view.findViewById(R.id.rvVoucherdl);
-//        LinearLayoutManager G = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
-//        rvVoucherdl.setLayoutManager(G);
-//        voucherAdapterdl=new VoucherAdapter(vouchersdl,this);
-//        rvVoucherdl.setAdapter(voucherAdapterdl);
-
-
-
-//        vouchers = new ArrayList<>();
-//        rvVoucherAT =view.findViewById(R.id.rvVoucherMain);
-//        LinearLayoutManager l = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
-//        rvVoucherAT.setLayoutManager(l);
-//        voucherAdapter = new VoucherAdapter((List<Voucher>) vouchers,this);
-//        rvVoucherAT.setAdapter(voucherAdapter);
-
-        //khoi tao va mo d
-
         }
-
-
     @Override
     public void setOnInfoClick(Voucher voucher) {
         Intent intent = new Intent(getContext(), ThongTinVoucherActivity.class);

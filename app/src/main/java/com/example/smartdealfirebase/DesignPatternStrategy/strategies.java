@@ -8,7 +8,6 @@ public class strategies {
     //Tạo Interface Voucher
     public interface IVoucherStrategy{
         void addToVouchersList(Voucher voucher, List<Voucher> voucherList);
-
     }
 
     //Triển khai các lớp cụ thể của voucher
@@ -20,8 +19,6 @@ public class strategies {
                 vouchersList.add(voucher);
             }
         }
-
-
     }
     public static class DuLichVoucherStrategy implements IVoucherStrategy {
 

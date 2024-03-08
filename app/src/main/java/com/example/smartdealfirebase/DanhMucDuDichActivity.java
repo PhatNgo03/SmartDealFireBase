@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.example.smartdealfirebase.Adapter.VoucherAdapter;
 import com.example.smartdealfirebase.Adapter.VoucherCategoryAdapter;
+import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
 import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,7 +32,8 @@ public class DanhMucDuDichActivity extends AppCompatActivity implements VoucherC
     ArrayList<Voucher> vouchersDuLich;
     private strategies.IVoucherStrategy iVoucherStrategy;
 
-    FirebaseFirestore db;
+   private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
+   private FirebaseFirestore firestore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,9 @@ public class DanhMucDuDichActivity extends AppCompatActivity implements VoucherC
         rvDanhMucDuLich=findViewById(R.id.rvDanhmucDuLich);
         vouchersDuLich=new ArrayList<>();
         voucherDuLichAdapter = new VoucherCategoryAdapter( vouchersDuLich,this);
-        db=FirebaseFirestore.getInstance();
+
+        fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
+        firestore = fireBaseFireStoreSingleton.getFirestore();
 
         // Sử dụng Strategy cho việc thêm các voucher vào danh sách ( chiến lược DuLichVoucherStrategy)
         iVoucherStrategy = new strategies.DuLichVoucherStrategy();
@@ -55,7 +59,7 @@ public class DanhMucDuDichActivity extends AppCompatActivity implements VoucherC
     private void loadDataFromFireStore() {
         vouchersDuLich.clear();
 
-        db.collection("Voucher")
+        firestore.collection("Voucher")
                 .orderBy("MaVoucher")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
