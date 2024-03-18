@@ -45,6 +45,7 @@ import java.util.List;
  * create an instance of this fragment.
  *
  */
+//Client sử dung Adapter
 public class TrangChuFragment extends Fragment implements VoucherAdapter.Listener {
 
     // TODO: Rename parameter arguments, choose names that match

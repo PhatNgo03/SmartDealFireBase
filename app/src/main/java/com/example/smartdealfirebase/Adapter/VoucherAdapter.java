@@ -23,12 +23,13 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
+
+//Adapter : cung cấp cách để hiển thị dữ liệu lên recyclerView
+//Adaptee : Voucher : đại diện cho các dữ liệu của voucher cần hiển thị
 public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherVH> {
-    private List<Voucher> vouchers;
+    private List<Voucher> vouchers; // Adapteee
 
     Listener listener;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-
     public VoucherAdapter(List<Voucher> vouchers, Listener listener) {
         this.vouchers = vouchers;
         this.listener = listener;
@@ -81,6 +82,8 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.VoucherV
 
         }
     }
+
+    // Listener ( target) : định nghĩa 1 hành động khi voucher được nhấn
     public interface Listener {
         void setOnInfoClick(Voucher voucher);
     }
