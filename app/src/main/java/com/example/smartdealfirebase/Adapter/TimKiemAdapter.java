@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,18 +60,7 @@ public class TimKiemAdapter extends RecyclerView.Adapter<TimKiemAdapter.TimKiemV
         holder.tvGiagiam.setText(String.valueOf(voucher.getDiscountPrice()));
         holder.tvGiagoc.setText(String.valueOf(voucher.getPrice()));
         holder.tvslngmua.setText(String.valueOf(voucher.getSlnguoimua()));
-        StorageReference storageRef = storage.getReference();
-        int targerWidth = 186;
-        int targetHeight = 114;
-        StorageReference imamgeRef = storageRef.child(String.valueOf(voucher.getHinhvc()));
-        imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap,targerWidth,targetHeight,false);
-                holder.mHinh.setImageBitmap(resizeBitMap);
-            }
-        });
+        Glide.with(holder.itemView.getContext()).load(Uri.parse(voucher.getHinhvc())).into(holder.ivVoucherImage);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,12 +111,12 @@ public class TimKiemAdapter extends RecyclerView.Adapter<TimKiemAdapter.TimKiemV
     }
 
     class TimKiemVH extends RecyclerView.ViewHolder {
-        ImageView mHinh;
+        ImageView ivVoucherImage;
         TextView tvTenvoucher,tvGiagoc,tvGiagiam,tvslngmua;
 
         public TimKiemVH(@NonNull View itemView) {
             super(itemView);
-            mHinh=itemView.findViewById(R.id.ivVoucherImage);
+            ivVoucherImage=itemView.findViewById(R.id.ivVoucherImage);
             tvTenvoucher=itemView.findViewById(R.id.tvVoucherName);
             tvGiagiam=itemView.findViewById(R.id.tvDiscountPrice);
             tvGiagoc=itemView.findViewById(R.id.tvPrice);

@@ -45,7 +45,7 @@
                 >
 
                 <EditText
-                    android:id="@+id/edtEmailDki"
+                    android:id="@+id/edtEmailRegister"
                     android:layout_width="253dp"
                     android:layout_height="31dp"
                     android:layout_gravity="center"
@@ -56,7 +56,7 @@
 
                     />
                 <EditText
-                    android:id="@+id/edtMKDki"
+                    android:id="@+id/edtPasswordRegister"
                     android:inputType="textPassword"
                     android:layout_width="253dp"
                     android:layout_height="31dp"
@@ -68,7 +68,7 @@
 
                     />
                 <EditText
-                    android:id="@+id/edtnhaplaiMKdki"
+                    android:id="@+id/edtRepassRegister"
                     android:layout_width="253dp"
                     android:inputType="textPassword"
                     android:layout_height="31dp"
@@ -81,7 +81,7 @@
                     />
 
                 <Button
-                    android:id="@+id/btdangkywithEmail"
+                    android:id="@+id/btRegisterWithEmail"
                     android:layout_width="150dp"
                     android:layout_height="36dp"
                     android:layout_gravity="center"

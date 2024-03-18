@@ -67,7 +67,7 @@
                     android:inputType="number" />
 
                 <Button
-                    android:id="@+id/btnYeuCauVerifyCode"
+                    android:id="@+id/btnRequestVerifyCode"
                     android:layout_width="150dp"
                     android:layout_height="36dp"
                     android:layout_gravity="center"
@@ -77,7 +77,7 @@
                     android:textAllCaps="false" />
 
                 <Button
-                    android:id="@+id/btnXacMinhVerifyCode"
+                    android:id="@+id/btnConfirmVerifyCode"
                     android:layout_width="122dp"
                     android:layout_height="36dp"
                     android:layout_gravity="center"

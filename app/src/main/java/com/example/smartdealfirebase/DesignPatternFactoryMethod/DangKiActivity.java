@@ -27,43 +27,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DangKiActivity extends AppCompatActivity {
-    EditText edtEmailDki,edtPasworDK, edtPrePass;
-    Button btdangKiWithEmail;
+    EditText edtEmailRegister,edtPaswordRegister, edtPrePass;
+    Button btRegisterWithEmail;
     private FirebaseAuth mAuth;
 
     private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
     private FirebaseFirestore firestore;
 
-
-    // Creator -> sử dụng Factory Method
-    interface RegistrationFactory {
-        Registration createRegistration();
-    }
-
     // ConcreteCretor : các lớp cụ thể triển khai Creator và triển khai Factory Method để tạo ra các đối tượng Product cụ thể.
-    class EmailRegistrationFactory implements RegistrationFactory {
+   public class EmailRegistrationFactory implements RegistrationFactory {
         @Override
-        public Registration createRegistration() {
+        public IRegistration createRegistration() {
             return new EmailRegistration();
         }
     }
 
-    // Tạo Interface cho đối tượng đăng ký ( product) //  Đ/N 1 interface cho các DTuong mà Factory sẽ tạo ra.
-    interface Registration {
-        void register(); // hành động cần thực hiện để đăng kí
-    }
     // ConcreteProduct: Lớp cụ thể để thực hiện việc đăng kí
-    class EmailRegistration implements Registration {
+    public  class EmailRegistration implements IRegistration {
         @Override
         public void register() {
             String email, pass, repass;
-            email = edtEmailDki.getText().toString();
-            pass = edtPasworDK.getText().toString();
+            email = edtEmailRegister.getText().toString();
+            pass = edtPaswordRegister.getText().toString();
             repass = edtPrePass.getText().toString();
 
             if (TextUtils.isEmpty(email)) {
-                showError(edtEmailDki, "Vui lòng nhập Email!!");
-                edtEmailDki.requestFocus();
+                showError(edtEmailRegister, "Vui lòng nhập Email!!");
+                edtEmailRegister.requestFocus();
                 return;
             }
             if (!pass.equals(repass)) {
@@ -72,17 +62,17 @@ public class DangKiActivity extends AppCompatActivity {
                 return;
             }
             if (!email.contains("@gmail.com")) {
-                showError(edtEmailDki, "Email đăng ký không hợp lệ");
-                edtEmailDki.requestFocus();
+                showError(edtEmailRegister, "Email đăng ký không hợp lệ");
+                edtEmailRegister.requestFocus();
                 return;
             }
             if (TextUtils.isEmpty(pass)) {
-                showError(edtPasworDK, "Vui lòng nhập password");
+                showError(edtPaswordRegister, "Vui lòng nhập password");
                 return;
             }
             if (!isPasswordValid(pass)) {
-                showError(edtPasworDK, "Mật khẩu không đủ điều kiện");
-                edtPasworDK.requestFocus();
+                showError(edtPaswordRegister, "Mật khẩu không đủ điều kiện");
+                edtPaswordRegister.requestFocus();
                 return;
             }
             firestore.collection("NguoiDung").whereEqualTo("Email", email).get()
@@ -129,13 +119,13 @@ public class DangKiActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
         firestore = fireBaseFireStoreSingleton.getFirestore();
-        edtEmailDki = findViewById(R.id.edtEmailDki);
-        edtPasworDK = findViewById(R.id.edtMKDki);
-        edtPrePass = findViewById(R.id.edtnhaplaiMKdki);
+        edtEmailRegister = findViewById(R.id.edtEmailRegister);
+        edtPaswordRegister = findViewById(R.id.edtPasswordRegister);
+        edtPrePass = findViewById(R.id.edtRepassRegister);
 
-        btdangKiWithEmail = findViewById(R.id.btdangkywithEmail);
+        btRegisterWithEmail = findViewById(R.id.btRegisterWithEmail);
 
-        btdangKiWithEmail.setOnClickListener(new View.OnClickListener() {
+        btRegisterWithEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 register();
@@ -153,11 +143,11 @@ public class DangKiActivity extends AppCompatActivity {
         return password.matches("^(?=.*[a-zA-Z])(?=.*\\d).{8,}$");
     }
 
-    // use factory method
+    // Sử dụng Factory
     public void register(){
         //lấy instance của factory dựa trên loại concreteCreator
         RegistrationFactory factory = new EmailRegistrationFactory();
-        Registration registration = factory.createRegistration();
+        IRegistration registration = factory.createRegistration();
         registration.register();
     }
 

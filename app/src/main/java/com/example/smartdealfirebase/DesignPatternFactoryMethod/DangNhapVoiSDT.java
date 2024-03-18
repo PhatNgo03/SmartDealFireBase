@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class DangNhapVoiSDT extends AppCompatActivity {
 
     EditText edtSdt, edtCodeVerify;
-    Button btnYeuCauVerifyCode, btnXacNhanMaCode;
+    Button btnRequestVerifyCode, btnConfirmCode;
     private FirebaseAuth mAuth;
 
     private FirebaseFirestore firestore;
@@ -140,8 +140,8 @@ public class DangNhapVoiSDT extends AppCompatActivity {
 
         edtSdt = findViewById(R.id.edtPhoneNumber);
         edtCodeVerify = findViewById(R.id.edtVerificationCode);
-        btnYeuCauVerifyCode = findViewById(R.id.btnYeuCauVerifyCode);
-        btnXacNhanMaCode = findViewById(R.id.btnXacMinhVerifyCode);
+        btnRequestVerifyCode = findViewById(R.id.btnRequestVerifyCode);
+        btnConfirmCode = findViewById(R.id.btnConfirmVerifyCode);
         // Tạo PhoneLoggingFactory
         LoggingFactory loggingFactory = new PhoneLoggingFactory();
 
@@ -149,7 +149,7 @@ public class DangNhapVoiSDT extends AppCompatActivity {
         Logging logging = loggingFactory.createLogging(this);
 
         // Xử lý sự kiện khi nhấn nút "Yêu cầu mã xác minh"
-        btnYeuCauVerifyCode.setOnClickListener(v -> {
+        btnRequestVerifyCode.setOnClickListener(v -> {
             String phoneNumber = edtSdt.getText().toString().trim();
             if (!TextUtils.isEmpty(phoneNumber)) {
                 logging.requestVerificationCode(phoneNumber);
@@ -158,7 +158,7 @@ public class DangNhapVoiSDT extends AppCompatActivity {
             }
         });
         // Xử lý sự kiện khi nhấn nút "Xác nhận mã"
-        btnXacNhanMaCode.setOnClickListener(v -> {
+        btnConfirmCode.setOnClickListener(v -> {
             String code = edtCodeVerify.getText().toString().trim();
             if (!TextUtils.isEmpty(code)) {
                 logging.verifyCode(code);

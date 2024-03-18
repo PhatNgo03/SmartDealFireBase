@@ -92,20 +92,6 @@ public class TimKiemActivity extends AppCompatActivity implements TimKiemAdapter
             }
         });
 
-        //Add a TextChangeListener to the SearchView
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                timKiemAdapter.getFilter().filter(query);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                timKiemAdapter.getFilter().filter(newText);
-//                return false;
-//            }
-//        });
 
 
     }
