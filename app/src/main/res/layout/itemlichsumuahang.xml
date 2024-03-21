@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <TextView
                 android:layout_gravity="center"
                 android:id="@+id/tvDate"
@@ -62,7 +63,7 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/tvHuy"
+                    android:id="@+id/tvTrangThai"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Đã Thanh Toán"

@@ -1,4 +1,4 @@
-package com.example.smartdealfirebase.Fragment;
+package com.example.smartdealfirebase.Prototype;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -73,11 +73,15 @@ public class DanhMucVoucherFragment extends Fragment{
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-    ArrayList<Voucher> vouchersDanhMuc;
+    ArrayList<VoucherPrototype> vouchersDanhMuc;
     RecyclerView rvDanhMucVoucher;
     NCCAdapter nccAdapter;
     ImageButton btVoucher;
     FirebaseFirestore db;
+
+    VoucherPrototype voucherPrototype; // Đối tượng "prototype"
+    VoucherFactory voucherFactory; // Factory để tạo voucher
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,6 +94,11 @@ public class DanhMucVoucherFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Khởi tạo đối tượng "prototype"
+        voucherPrototype = new VoucherPrototype("MaVoucher", "TenVoucher", 0, 0, 0, "MoTa", "DanhMuc", "HinhAnh");
+
+        // Khởi tạo Factory với "prototype"
+        voucherFactory = new VoucherFactory(voucherPrototype);
 
         rvDanhMucVoucher =view.findViewById(R.id.rvDanhMucVoucher);
         btVoucher = view.findViewById(R.id.btThemVoucher);
@@ -117,17 +126,29 @@ public class DanhMucVoucherFragment extends Fragment{
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            String MaVoucher = document.get("MaVoucher").toString();
-                            String TenVoucher = document.get("TenVoucher").toString();
-                            Integer GiaGiam = Integer.parseInt(document.get("GiaGiam").toString());
-                            Integer GiaGoc = Integer.parseInt(document.get("GiaGoc").toString());
-                            Integer SlNguoimua = Integer.parseInt(document.get("SLNguoiMua").toString());
-                            String Mota = document.get("MoTa").toString();
-                            String DanhMuc = document.get("DanhMuc").toString();
-                            String Hinh = document.get("HinhAnh").toString();
+                            //Sử dụng factory để tạo mới voucher từ prototype
+                            VoucherPrototype newVoucher = voucherFactory.createVoucher();
+                            newVoucher.setMaVoucher(document.get("MaVoucher").toString());
+                            newVoucher.setTenVoucher(document.get("TenVoucher").toString());
+                            newVoucher.setGiaGiam(Integer.parseInt(document.get("GiaGiam").toString()));
+                            newVoucher.setGiaGoc(Integer.parseInt(document.get("GiaGoc").toString()));
+                            newVoucher.setSlNguoiMua(Integer.parseInt(document.get("SLNguoiMua").toString()));
+                            newVoucher.setMoTa(document.get("MoTa").toString());
+                            newVoucher.setDanhMuc(document.get("DanhMuc").toString());
+                            newVoucher.setHinhAnh(document.get("HinhAnh").toString());
+                            vouchersDanhMuc.add(newVoucher);
 
-                                Voucher voucher = new Voucher(MaVoucher, TenVoucher, GiaGiam, GiaGoc, Mota, DanhMuc, SlNguoimua, Hinh);
-                                vouchersDanhMuc.add(voucher);
+//                            String MaVoucher = document.get("MaVoucher").toString();
+//                            String TenVoucher = document.get("TenVoucher").toString();
+//                            Integer GiaGiam = Integer.parseInt(document.get("GiaGiam").toString());
+//                            Integer GiaGoc = Integer.parseInt(document.get("GiaGoc").toString());
+//                            Integer SlNguoimua = Integer.parseInt(document.get("SLNguoiMua").toString());
+//                            String Mota = document.get("MoTa").toString();
+//                            String DanhMuc = document.get("DanhMuc").toString();
+//                            String Hinh = document.get("HinhAnh").toString();
+//
+//                                Voucher voucher = new Voucher(MaVoucher, TenVoucher, GiaGiam, GiaGoc, Mota, DanhMuc, SlNguoimua, Hinh);
+
                         }
                         nccAdapter.notifyDataSetChanged();
 

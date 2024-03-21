@@ -39,6 +39,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:24.7.0'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
+    implementation 'com.android.volley:volley:1.2.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -52,6 +53,9 @@ dependencies {
 
     //sms verify code sdt
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    //stripe
+    implementation 'com.stripe:stripe-android:20.28.0'
+    implementation 'com.stripe:stripe-java:22.2.0'
 
 
 }

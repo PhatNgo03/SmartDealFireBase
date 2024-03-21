@@ -15,9 +15,11 @@
         android:theme="@style/Theme.SmartDealFireBase"
         tools:targetApi="31">
         <activity
+            android:name=".PaymentOptionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".DesignPatternFactoryMethod.DangNhapVoiSDT"
             android:exported="false" />
-
         <activity
             android:name=".EditVoucherActivity"
             android:exported="false" />

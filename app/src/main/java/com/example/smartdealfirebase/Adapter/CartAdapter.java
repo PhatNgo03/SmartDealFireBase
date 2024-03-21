@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,19 +28,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.GioHangViewHolder> {
-    ImageView imgAnhSP;
-    TextView tvTenSp,tvGiaGiam,tvGiaGoc,tvSoLuong;
-    ImageButton btTang, btGiam, btXoa;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
 
-
+    private List<ItemCart> selectedItems = new ArrayList<>();
     private List<ItemCart> itemCarts;
 
-//    private List<String> imageUrls;
-//    public void setImageUrls(List<String> imageUrls) {
-//        this.imageUrls = imageUrls;
-//    }
-//    Voucher voucher;
+    private OnSelectedItemsChangedListener onSelectedItemsChangedListener;
+    public interface OnSelectedItemsChangedListener {
+        void onSelectedItemsChanged(List<ItemCart> selectedItems);
+    }
+    public void setOnSelectedItemsChangedListener(OnSelectedItemsChangedListener listener) {
+        this.onSelectedItemsChangedListener = listener;
+    }
+
+
     private OnItemClickListener listener;
 
     public interface OnItemLongClickListener {
@@ -67,26 +69,43 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.GioHangViewHol
     @Override
     public void onBindViewHolder(@NonNull GioHangViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ItemCart itemCart = itemCarts.get(position);
-        holder.tvTenSanPham.setText(itemCart.getVoucherName());
-        holder.tvGiaGiam.setText(String.valueOf(itemCart.getDiscountPrice()));
-        holder.tvGiaGoc.setText(String.valueOf(itemCart.getPrice()));
-        holder.tvSoLuong.setText(String.valueOf(itemCart.getQuantity()));
+        holder.tvVoucherName.setText(itemCart.getVoucherName());
+        holder.tvDiscountPriceCart.setText(String.valueOf(itemCart.getDiscountPrice()));
+        holder.tvPriceCart.setText(String.valueOf(itemCart.getPrice()));
+        holder.tvQuantityCart.setText(String.valueOf(itemCart.getQuantity()));
 
-        Glide.with(holder.itemView.getContext()).load(itemCart.getHinhAnh()).into(holder.imgAnhSP);
+        Glide.with(holder.itemView.getContext()).load(itemCart.getHinhAnh()).into(holder.imgVoucher);
 
-//        StorageReference storageRef = storage.getReference();
-//        int targerWidth = 119;
-//        int targetHeight = 70;
-//        StorageReference imamgeRef = storageRef.child(String.valueOf(itemCart.getHinhAnh()));
-//        imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        holder.cbCartItem.setChecked(selectedItems.contains(itemCart));
+        holder.cbCartItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cập nhật trạng thái checked của mục
+                itemCart.setChecked(holder.cbCartItem.isChecked());
+
+                // Thông báo cho Fragment rằng trạng thái đã thay đổi
+                if (onSelectedItemsChangedListener != null) {
+                    onSelectedItemsChangedListener.onSelectedItemsChanged(selectedItems);
+                }
+            }
+        });
+//        holder.cbCartItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
-//            public void onSuccess(byte[] bytes) {
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//                Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap,targerWidth,targetHeight,false);
-//                holder.imgAnhSP.setImageBitmap(resizeBitMap);
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    // Nếu checkbox được chọn, thêm item vào danh sách các voucher được chọn
+//                    selectedItems.add(itemCart);
+//                } else {
+//                    // Nếu checkbox không được chọn, loại bỏ item khỏi danh sách các voucher được chọn
+//                    selectedItems.remove(itemCart);
+//                }
+//
+//                // Thông báo cho listener về sự thay đổi của danh sách các voucher được chọn
+//                if (onSelectedItemsChangedListener != null) {
+//                    onSelectedItemsChangedListener.onSelectedItemsChanged(selectedItems);
+//                }
 //            }
 //        });
-
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -98,25 +117,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.GioHangViewHol
             }
         });
 
-//
-//        Voucher voucher = null;
-//        tvTenSp.setText(voucher.getVoucherName());
-//        tvGiaGoc.setText(String.valueOf(voucher.getPrice()) + "đ");
-//        tvGiaGiam.setText(String.valueOf(voucher.getDiscountPrice()) + "đ");
-//        tvSoLuong.setText(String.valueOf(itemCart.getQuantity()));
-//        StorageReference storageRef = storage.getReference();
-//        int targerWidth = 186;
-//        int targetHeight = 114;
-//        StorageReference imamgeRef = storageRef.child(String.valueOf(voucher.getHinhvc()));
-//        imamgeRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//                Bitmap resizeBitMap = Bitmap.createScaledBitmap(bitmap,targerWidth,targetHeight,false);
-//                holder.imgAnhSP.setImageBitmap(resizeBitMap);
-//            }
-//        });
-        holder.btTangSL.setOnClickListener(new View.OnClickListener() {
+        holder.btnIncreaseCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int currentQuantity = itemCart.getQuantity();
@@ -126,7 +127,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.GioHangViewHol
 
             }
         });
-        holder.btGiamSL.setOnClickListener(new View.OnClickListener() {
+        holder.btnDecreaseCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int currentQuantity = itemCart.getQuantity();
@@ -138,7 +139,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.GioHangViewHol
                 }
             }
         });
-        holder.tvXoaCart.setOnClickListener(new View.OnClickListener() {
+        holder.tvDeleteCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Gọi phương thức onDeleteCartItemClicked khi người dùng nhấn nút xóa
@@ -193,21 +194,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.GioHangViewHol
     }
 
     public class GioHangViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgAnhSP;
-        TextView tvTenSanPham, tvGiaGiam, tvGiaGoc, tvSoLuong,tvXoaCart;
-        ImageButton btTangSL, btGiamSL;
+        ImageView imgVoucher;
+        TextView tvVoucherName, tvPriceCart, tvDiscountPriceCart, tvQuantityCart,  tvDeleteCart;
+        ImageButton btnIncreaseCart, btnDecreaseCart;
+        CheckBox cbCartItem;
 
         public GioHangViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgAnhSP = itemView.findViewById(R.id.imgVoucherCart);
-            tvTenSanPham = itemView.findViewById(R.id.tvtenvoucherCart);
-            tvGiaGiam = itemView.findViewById(R.id.tvgiagiamCart);
-            tvGiaGoc= itemView.findViewById(R.id.tvgiagocCart);
-            tvSoLuong = itemView.findViewById(R.id.tvslCart);
-            btTangSL = itemView.findViewById(R.id.btnTangSoLuong);
-            btGiamSL = itemView.findViewById(R.id.btnGiamSoLuong);
-            tvXoaCart = itemView.findViewById(R.id.btnxoavoucherCart);
-
+            imgVoucher = itemView.findViewById(R.id.imgVoucherCart);
+            tvVoucherName = itemView.findViewById(R.id.tvtenvoucherCart);
+            tvDiscountPriceCart = itemView.findViewById(R.id.tvDiscountPriceCart);
+            tvPriceCart= itemView.findViewById(R.id.tvPriceCart);
+            tvQuantityCart = itemView.findViewById(R.id.tvQuantityCart);
+            btnIncreaseCart = itemView.findViewById(R.id.btnIncreaseCart);
+            btnDecreaseCart = itemView.findViewById(R.id.btnDecreaseCart);
+            tvDeleteCart = itemView.findViewById(R.id.btnDeleteCart);
+            cbCartItem = itemView.findViewById(R.id.cbCart);
         }
     }
 }

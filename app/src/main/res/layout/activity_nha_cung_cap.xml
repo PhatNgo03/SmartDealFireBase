@@ -11,6 +11,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/bkcolor"
         app:menu="@menu/menunhacc"
         app:layout_constraintStart_toStartOf="parent" />
     <FrameLayout

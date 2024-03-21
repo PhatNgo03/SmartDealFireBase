@@ -40,6 +40,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -109,17 +110,23 @@ public class CartFragment extends Fragment {
             }
         }
 
-        Button btnNhapThongTinGiaoHang = view.findViewById(R.id.btGiaoHang);
-        btnNhapThongTinGiaoHang.setOnClickListener(new View.OnClickListener() {
+        Button btnBuyVoucherToCart = view.findViewById(R.id.btnBuyVoucherToCart);
+        btnBuyVoucherToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                // Gọi đến interface để chuyển sang OrderFragment
-//                if (listener != null) {
-//                    // Thực hiện hành động khi nút đặt hàng được click
-//                    listener.onOrderButtonClick(itemCart); // Truyền dữ liệu itemCart nếu cần
-//                navigateToOrderFragment();
-              navigateToOrderFragment(itemCart);
-//                }
+                List<ItemCart> selectedItems = new ArrayList<>();
+                for (ItemCart cartItem : itemCarts) {
+                    if (cartItem.isChecked()) {
+                        selectedItems.add(cartItem);
+                    }
+                }
+                if (selectedItems.isEmpty()) {
+                    // Hiển thị thông báo cho người dùng rằng họ chưa chọn bất kỳ voucher nào
+                    Toast.makeText(requireContext(), "Vui lòng chọn ít nhất một voucher để đặt hàng", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Chuyển danh sách các voucher đã chọn qua OrderFragment
+                    navigateToOrderFragment1(selectedItems);
+                }
             }
         });
 
@@ -163,7 +170,7 @@ public class CartFragment extends Fragment {
 //        transaction.commit();
 //    }
     private void navigateToInvoiceFragmentTest(ItemCart itemCart) {
-        OrderFragment orderFragment = OrderFragment.newInstance(itemCart);
+        OrderFragment orderFragment = OrderFragment.newInstance((List<ItemCart>) itemCart);
         FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.FrameOrder, orderFragment); // Thay "R.id.FrameOrder" bằng ID của FrameLayout hiện tại
         transaction.addToBackStack(null);
@@ -302,43 +309,7 @@ public class CartFragment extends Fragment {
                     }
                 });
     }
-//    private void loadCartItemsFromFirestore() {
-//            FirebaseFirestore db = FirebaseFirestore.getInstance();
-//            CollectionReference cartItemsRef = db.collection("cartItems");
-//
-//            // Lấy dữ liệu từ Firestore
-//            cartItemsRef.get()
-//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                // Xử lý dữ liệu khi lấy thành công
-//                                itemCarts.clear();
-//                                for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    String itemID = document.getId(); // Lấy ID của item trong Firestore
-//                                    String voucherName = document.getString("voucherName");
-//                                    Long discountPriceLong = document.getLong("discountPrice");
-//                                    Long priceLong = document.getLong("price");
-//                                    Long quantityLong = document.getLong("quantity");
-//                                    Long ToTal = document.getLong("ToTal");
-//                                    String HinhAnh = document.getString("HinhAnh");
-//                                    String UserID = document.getString("UserId");
-//
-//                                    // Kiểm tra xem các trường discountPrice, price, quantity có tồn tại và không phải là null
-//                                    int discountPrice = (discountPriceLong != null) ? discountPriceLong.intValue() : 0;
-//                                    int price = (priceLong != null) ? priceLong.intValue() : 0;
-//                                    int quantity = (quantityLong != null) ? quantityLong.intValue() : 0;
-//                                    int total = (ToTal != null) ? ToTal.intValue() : 0;
-//                                    ItemCart itemCart = new ItemCart(itemID,voucherName,discountPrice,price,quantity,UserID,total,HinhAnh,"");
-////                                    ItemCart itemCart = new ItemCart(itemID, voucherName, discountPrice, price, quantity,total,HinhAnh,"",""); // Truyền ID vào ItemCart
-//                                    itemCarts.add(itemCart);
-//                                }
-//                                cartAdapter.notifyDataSetChanged();
-//                            } else {
-//                            }
-//                        }
-//                    });
-//        }
+
 private void loadCartItemsFromFirestore() {
     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     if (firebaseUser == null) {
@@ -398,4 +369,14 @@ private void loadCartItemsFromFirestore() {
         transaction.addToBackStack("TrangChuFragment"); // Để có thể quay lại fragment trước đó bằng nút back
         transaction.commit();
     }
+    private void navigateToOrderFragment1(List<ItemCart> selectedItems) {
+        OrderFragment orderFragment = OrderFragment.newInstance(selectedItems);
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frContent, orderFragment);
+        transaction.addToBackStack("CartFragment"); // Để có thể quay lại fragment trước đó bằng nút back
+        transaction.commit();
+
+
+    }
+
 }

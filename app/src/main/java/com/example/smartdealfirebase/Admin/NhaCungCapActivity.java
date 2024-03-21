@@ -8,8 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.smartdealfirebase.Fragment.DanhMucVoucherFragment;
-import com.example.smartdealfirebase.Fragment.VoucherFragment;
+import com.example.smartdealfirebase.Prototype.DanhMucVoucherFragment;
 import com.example.smartdealfirebase.R;
 import com.example.smartdealfirebase.ThongBaoFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

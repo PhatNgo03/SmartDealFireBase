@@ -11,6 +11,14 @@ public class ItemCart implements Serializable {
     private String UserId;
     private int ToTal;
     private String HinhAnh;
+    private boolean isChecked; // Thuộc tính để đánh dấu liệu mục đã được chọn hay không
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
     public ItemCart(){
 
     }

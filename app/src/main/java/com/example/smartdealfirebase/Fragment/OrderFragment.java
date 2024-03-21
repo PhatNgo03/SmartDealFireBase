@@ -1,29 +1,44 @@
 package com.example.smartdealfirebase.Fragment;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.smartdealfirebase.Adapter.CartAdapter;
+import com.example.smartdealfirebase.Adapter.SelectedVoucherAdapter;
+import com.example.smartdealfirebase.Adapter.VoucherAdapter;
 import com.example.smartdealfirebase.Model.ItemCart;
+import com.example.smartdealfirebase.PaymentOptionsActivity;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.stripe.android.paymentsheet.PaymentSheetResult;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,28 +47,29 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class OrderFragment extends Fragment {
-    private TextView tvTenNguoiDung;
-    private TextView tvSDT;
-    private TextView GhiChu;
-    private TextView tvDiaChi;
-    private TextView tvDiscountPrice;
-    private TextView tvPrice;
-    private TextView tvQuantity;
-    private TextView tvTotal;
-    private Button btThanhToan;
-    private ItemCart itemCart;
+    private List<ItemCart> selectedItems = new ArrayList<>();
+    private SelectedVoucherAdapter selectedVoucherAdapter;
 
-    private CartAdapter cartAdapter;
-    private FirebaseFirestore db;
 
-    // Thêm phương thức newInstance để truyền thông tin hóa đơn vào fragment
-    public static OrderFragment newInstance(ItemCart itemCart) {
+    public static OrderFragment newInstance(List<ItemCart> selectedItems) {
         OrderFragment orderFragment = new OrderFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("itemCart", itemCart);
+        bundle.putSerializable("selectedItems", (Serializable) selectedItems);
         orderFragment.setArguments(bundle);
         return orderFragment;
     }
+
+    private FirebaseFirestore db;
+
+
+    // Thêm phương thức newInstance để truyền thông tin hóa đơn vào fragment
+//    public static OrderFragment newInstance(ItemCart itemCart) {
+//        OrderFragment orderFragment = new OrderFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("itemCart", itemCart);
+//        orderFragment.setArguments(bundle);
+//        return orderFragment;
+//    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -106,85 +122,44 @@ public class OrderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
-        tvPrice = view.findViewById(R.id.tvGiaGocOrder);
-        tvDiscountPrice = view.findViewById(R.id.tvGiaGiamOrder);
-        tvTotal = view.findViewById(R.id.tvTongTienOrder);
 
-        // Lấy thông tin hóa đơn từ bundle
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            ItemCart itemCart = (ItemCart) bundle.getSerializable("itemCart");
-            if (itemCart != null) {
-                // Hiển thị thông tin hóa đơn
-                tvDiscountPrice.setText(String.valueOf(itemCart.getDiscountPrice()));
-                tvPrice.setText(String.valueOf(itemCart.getPrice()));
-                int discount = itemCart.getDiscountPrice();
-                int quantity = itemCart.getQuantity();
-                int total = discount * quantity;
-                tvTotal.setText(String.valueOf(total));
-//                tvTotal.setText(String.valueOf(itemCart.getQuantity()));
-            }
+        RecyclerView recyclerView = view.findViewById(R.id.rvVoucherOrder);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Kiểm tra xem danh sách các mục đã chọn có được truyền từ CartFragment hay không
+        if (getArguments() != null && getArguments().containsKey("selectedItems")) {
+            selectedItems = (List<ItemCart>) getArguments().getSerializable("selectedItems");
         }
-        btThanhToan = view.findViewById(R.id.btThanhToan);
-        btThanhToan.setOnClickListener(new View.OnClickListener() {
+
+        // Khởi tạo adapter và thiết lập dữ liệu cho RecyclerView
+        selectedVoucherAdapter = new SelectedVoucherAdapter(getContext(), selectedItems);
+        recyclerView.setAdapter(selectedVoucherAdapter);
+        selectedVoucherAdapter.setOnDeleteClickListener(new SelectedVoucherAdapter.IOnDeleteClickListener() {
+            @Override
+            public void onDeleteClickListener(int position) {
+                selectedItems.remove(position);
+                selectedVoucherAdapter.notifyDataSetChanged();
+            }
+        });
+
+        Button btnCheckOutOrder = view.findViewById(R.id.btnCheckout);
+        btnCheckOutOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                addOrderToFirestore(itemCart);
-//                        if(itemCart != null){
-//                            showOrderDialog(itemCart);
-//
-//                        }else {
-//                            Toast.makeText(requireContext(), "Không tìm thấy thông tin đơn hàng.", Toast.LENGTH_SHORT).show();
-//                        }
-                Toast.makeText(requireContext(), "Đơn hàng đã được thanh toán", Toast.LENGTH_SHORT).show();
-                    }
-        });
+                // Khởi tạo Intent để chuyển từ OrderFragment sang PaymentOptionsActivity
+                Intent intent = new Intent(getContext(), PaymentOptionsActivity.class);
 
-    }
-private void addOrderToFirestore(ItemCart itemCart) {
-    if (itemCart == null) {
-        // Xử lý nếu itemCart là null, ví dụ: hiển thị thông báo hoặc xử lý sai lầm
-        Toast.makeText(requireContext(), "Không tìm thấy thông tin đơn hàng.", Toast.LENGTH_SHORT).show();
-        return;
-    }
-    db = FirebaseFirestore.getInstance();
-    // Tạo một Map chứa thông tin đặt hàng
-    Map<String, Object> order = new HashMap<>();
-    order.put("voucherName", itemCart.getVoucherName());
-    order.put("discountPrice", itemCart.getDiscountPrice());
-    order.put("price", itemCart.getPrice());
-    order.put("quantity", itemCart.getQuantity());
-    order.put("ToTal", itemCart.getToTal());
-    order.put("userAddress", itemCart.getUserId());
+                // Đính kèm danh sách các mục đã chọn với Intent (nếu cần)
+                intent.putExtra("selectedItems", (Serializable) selectedItems);
 
-    // Lưu thông tin đặt hàng vào Firestore
-    db.collection("orders").add(order)
-            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    // Xử lý khi lưu thông tin đặt hàng thành công
-                    Toast.makeText(requireContext(), "Đơn hàng đang được xử lý!", Toast.LENGTH_SHORT).show();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // Xử lý khi có lỗi xảy ra khi lưu thông tin đặt hàng
-                    Toast.makeText(requireContext(), "Đặt hàng thất bại!", Toast.LENGTH_SHORT).show();
-                }
-            });
-}
-    private void showOrderDialog(ItemCart itemCart) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Đặt hàng");
-        builder.setMessage("Bạn muốn đặt hàng sản phẩm này?");
-        builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                addOrderToFirestore(itemCart);
+                // Chuyển sang trang PaymentOptionsActivity
+                startActivity(intent);
             }
         });
-        builder.setNegativeButton("Hủy", null);
-        builder.show();
+
     }
+
+
+
 }
