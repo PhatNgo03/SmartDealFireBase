@@ -138,18 +138,7 @@ public class DanhMucVoucherFragment extends Fragment{
                             newVoucher.setHinhAnh(document.get("HinhAnh").toString());
                             vouchersDanhMuc.add(newVoucher);
 
-//                            String MaVoucher = document.get("MaVoucher").toString();
-//                            String TenVoucher = document.get("TenVoucher").toString();
-//                            Integer GiaGiam = Integer.parseInt(document.get("GiaGiam").toString());
-//                            Integer GiaGoc = Integer.parseInt(document.get("GiaGoc").toString());
-//                            Integer SlNguoimua = Integer.parseInt(document.get("SLNguoiMua").toString());
-//                            String Mota = document.get("MoTa").toString();
-//                            String DanhMuc = document.get("DanhMuc").toString();
-//                            String Hinh = document.get("HinhAnh").toString();
-//
-//                                Voucher voucher = new Voucher(MaVoucher, TenVoucher, GiaGiam, GiaGoc, Mota, DanhMuc, SlNguoimua, Hinh);
-
-                        }
+                    }
                         nccAdapter.notifyDataSetChanged();
 
                     }

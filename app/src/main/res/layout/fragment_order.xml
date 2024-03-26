@@ -27,12 +27,24 @@
         android:padding="8dp"
         android:clipToPadding="false"
         android:scrollbars="vertical" />
+    <Button
+        android:id="@+id/btNhapThongTinGiaoHang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_200"
+        android:textColor="@color/white"
+        android:text="Nhập thông tin giao hàng"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="250dp" />
     <!-- Nút thanh toán -->
     <Button
         android:id="@+id/btnCheckout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thanh toán"
+        android:textColor="@color/white"
+        android:background="@color/red"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="160dp" />

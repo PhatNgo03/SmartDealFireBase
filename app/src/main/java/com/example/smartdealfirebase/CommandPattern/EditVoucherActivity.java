@@ -1,4 +1,4 @@
-package com.example.smartdealfirebase;
+package com.example.smartdealfirebase.CommandPattern;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.smartdealfirebase.Model.Voucher;
+import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,7 +36,6 @@ public class EditVoucherActivity extends AppCompatActivity {
     ImageView imgChonHinh;
     EditText edtMaVoucher,edtTenVoucher,edtGiaGiam,edtGiaGoc,edtMoTa,edtSoLuongNguoiMua,edtDanhMuc;
     Button btnCapNhat;
-    Voucher voucher;
     Uri imageUri;
     FirebaseFirestore firestore;
     StorageReference storageReference;
@@ -50,7 +50,7 @@ public class EditVoucherActivity extends AppCompatActivity {
             imgChonHinh.setImageURI(imageUri);
         }
         else {
-            Log.d("ngu", "fsdkjfs");
+            Log.d("Upload Image Success", "Imgage Success");
         }
     }
 
@@ -61,7 +61,7 @@ public class EditVoucherActivity extends AppCompatActivity {
         startActivityForResult(intent,100);
     }
 
-    private void uploadImageToFirebaseStorage(Uri imageUri, String maVoucher, String TenVoucher, String GiaGiam, String GiaGoc, String MoTa, String DanhMuc, String SLNguoiMua, String img) {
+    public void uploadImageToFirebaseStorage(Uri imageUri, String maVoucher, String TenVoucher, String GiaGiam, String GiaGoc, String MoTa, String DanhMuc, String SLNguoiMua, String img) {
 
         StorageReference fileReference = storageReference.child(System.currentTimeMillis() + ".jpg");
         fileReference.putFile(imageUri)
@@ -166,16 +166,8 @@ public class EditVoucherActivity extends AppCompatActivity {
         btnCapNhat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               String MaVoucher = voucher.getMaVoucher();
-                String TenVoucher = edtTenVoucher.getText().toString();
-                String GiaGiam = edtGiaGiam.getText().toString();
-                String GiaGoc = edtGiaGoc.getText().toString();
-                String MoTa = edtMoTa.getText().toString();
-                String DanhMuc = edtDanhMuc.getText().toString();
-                String SLNguoiMua = edtSoLuongNguoiMua.getText().toString();
-                String img = String.valueOf(imageUri);
-                Log.d("mavocher", MaVoucher);
-                uploadImageToFirebaseStorage(imageUri,MaVoucher, TenVoucher, GiaGiam, GiaGoc, MoTa, DanhMuc, SLNguoiMua, img);
+                IUppDelCommand uppDelCommand = new UppDelVoucherCommand(EditVoucherActivity.this, firestore, storageReference, voucher, imageUri);
+                uppDelCommand.excecute();
             }
         });
     }

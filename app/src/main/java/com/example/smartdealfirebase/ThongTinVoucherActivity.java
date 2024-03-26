@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -17,6 +18,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +57,7 @@ public class ThongTinVoucherActivity extends AppCompatActivity {
     private TextView tvVoucherName, tvDiscountPrice, tvPrice, tvMota;
     private Button btBuy, btAddToCart;
 
+    private CheckBox cbYeuThich;
     CartAdapter cartAdapter;
     FirebaseUser firebaseUser;
 
@@ -70,6 +74,7 @@ public class ThongTinVoucherActivity extends AppCompatActivity {
         tvDiscountPrice = findViewById(R.id.tvIFDiscountPrice);
         tvPrice = findViewById(R.id.tvIFPrice);
         tvMota = findViewById(R.id.tvIFMota);
+        cbYeuThich=findViewById(R.id.TymButton);
         cartAdapter = new CartAdapter(new ArrayList<ItemCart>());
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("ThongTinVoucher")) {
@@ -204,6 +209,92 @@ public class ThongTinVoucherActivity extends AppCompatActivity {
             }
         });
 
+        cbYeuThich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged( CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    voucher.setYeuThich(true);
+                    Toast.makeText(ThongTinVoucherActivity.this, "Thành công ", Toast.LENGTH_SHORT).show();
+                    putChuyenBayYeuThich(voucher);
+                } else {
+                    voucher.setYeuThich(false);
+                    xoaDulieuTrenFirestore(voucher);
+                    cbYeuThich.setBackgroundResource(R.drawable.heart_24);
+                }
+            }
+        });
+
+    }
+    private  void putChuyenBayYeuThich(Voucher voucher){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Map<String, Object> favoriteItem = new HashMap<>();
+        favoriteItem.put("voucherId",voucher.get_id());
+        favoriteItem.put("MaVoucher",voucher.getMaVoucher());
+        favoriteItem.put("UserId", userID);
+        favoriteItem.put("TenVoucher", voucher.getVoucherName());
+        favoriteItem.put("HinhAnh",voucher.getHinhvc());
+        favoriteItem.put("GiaGiam",voucher.getDiscountPrice());
+        favoriteItem.put("GiaGoc",voucher.getPrice());
+        favoriteItem.put("MoTa",voucher.getMoTa());
+        favoriteItem.put("DanhMuc",voucher.getDanhMuc());
+        favoriteItem.put("SLNguoiMua",voucher.getSlnguoimua());
+        favoriteItem.put("isYeuThich", voucher.isYeuThich());
+        db.collection("favorites")
+                .add(favoriteItem)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        cbYeuThich.setBackgroundResource(R.drawable.heart_red_24);
+                        Toast.makeText(ThongTinVoucherActivity.this, "Thành công", Toast.LENGTH_SHORT).show();
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("isYeuThich_" + voucher.getMaVoucher(), voucher.isYeuThich());
+                        editor.putInt("checkBoxBackground_" + voucher.getVoucherName(), R.drawable.heart_red_24);
+                        editor.apply();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
+                        // Xử lý khi thêm item thất bại
+                        Toast.makeText(ThongTinVoucherActivity.this, "Lỗi ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void xoaDulieuTrenFirestore(Voucher voucher) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Lấy ID của voucher
+        String voucherId = voucher.get_id();
+
+        // Kiểm tra xem ID của voucher có tồn tại không
+        if (voucherId != null && !voucherId.isEmpty()) {
+            // Thực hiện xóa tài liệu từ collection "favorites" với ID là voucherId
+            db.collection("favorites")
+                    .document(voucherId)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // Xóa thành công
+                            Toast.makeText(ThongTinVoucherActivity.this, "Đã xóa khỏi danh sách yêu thích!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@androidx.annotation.NonNull Exception e) {
+                            // Xảy ra lỗi khi xóa
+                            Toast.makeText(ThongTinVoucherActivity.this, "Lỗi khi xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            // Nếu voucherId không tồn tại hoặc rỗng, hiển thị thông báo lỗi
+            Toast.makeText(ThongTinVoucherActivity.this, "Không thể xóa vì thiếu thông tin ID của voucher!", Toast.LENGTH_SHORT).show();
+        }
     }
     @SuppressLint("ResourceType")
     private void navigateToCartFragment(ItemCart itemCart) {

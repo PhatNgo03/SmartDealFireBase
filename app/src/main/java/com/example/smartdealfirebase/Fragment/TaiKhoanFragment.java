@@ -13,10 +13,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.smartdealfirebase.DangNhapActivity;
+import com.example.smartdealfirebase.DanhSachVoucherDaThichActivity;
 import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
 import com.example.smartdealfirebase.LichSuMuaHang;
 import com.example.smartdealfirebase.R;
@@ -92,6 +94,7 @@ public class TaiKhoanFragment extends Fragment {
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
+    TextView tvYeuThich;
 
 
 
@@ -104,6 +107,7 @@ public class TaiKhoanFragment extends Fragment {
         tvemail=view.findViewById(R.id.tvemail);
         firebaseAuth=FirebaseAuth.getInstance();
         tvdangxuat=view.findViewById(R.id.btndangxuat);
+        tvYeuThich =view.findViewById(R.id.btnyeuthich);
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
@@ -145,7 +149,6 @@ public class TaiKhoanFragment extends Fragment {
             tvemail.setText("Chưa đăng nhập");
             tvten.setText("Chưa đăng nhập");
         }
-
         tvdangxuat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -176,7 +179,14 @@ public class TaiKhoanFragment extends Fragment {
                 }
             });
         }
+        tvYeuThich.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), DanhSachVoucherDaThichActivity.class));
+            }
+        });
     }
+
     private void signOutUser() {
         Intent intent=new Intent(getContext(),DangNhapActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);

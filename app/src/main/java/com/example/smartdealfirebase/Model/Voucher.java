@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Voucher implements Serializable {
 
-    private Object _id;
+    private String voucherId;
     private String maVoucher;
     private String voucherName;
     private int discountPrice;
@@ -14,24 +14,40 @@ public class Voucher implements Serializable {
     private int slnguoimua;
     private String hinhvc;
 
+    private Boolean isYeuThich;
 
-    public Object get_id() {
-        return _id;
+
+    public Voucher(String id, String maVoucher, String tenVoucher, Integer giaGiam, Integer giaGoc, String mota, String danhMuc, Integer slNguoimua, String hinh, Boolean isYeuThich) {
+        this.voucherId = id;
+        this.maVoucher = maVoucher;
+        this.voucherName = tenVoucher;
+        this.discountPrice = giaGiam;
+        Price = giaGoc;
+        this.moTa = mota;
+        DanhMuc = danhMuc;
+        this.slnguoimua = slNguoimua;
+        this.hinhvc = hinh;
+        this.isYeuThich = isYeuThich;
     }
 
-    public void set_id(Object _id) {
-        this._id = _id;
+
+    public String get_id() {
+        return voucherId;
+    }
+
+    public void set_id(String _id) {
+        this.voucherId = _id;
     }
 
     public Voucher() {
     }
 
-    public Voucher(Object _id) {
-        this._id = _id;
+    public Voucher(String _id) {
+        this.voucherId = _id;
     }
 
-    public Voucher(Object _id, String maVoucher, String voucherName, int discountPrice, int price, String moTa, String danhMuc, int slnguoimua, String hinhvc) {
-        this._id = _id;
+    public Voucher(String voucherId, String maVoucher, String voucherName, int discountPrice, int price, String moTa, String danhMuc, int slnguoimua, String hinhvc) {
+        this.voucherId = voucherId;
         this.maVoucher = maVoucher;
         this.voucherName = voucherName;
         this.discountPrice = discountPrice;
@@ -118,5 +134,13 @@ public class Voucher implements Serializable {
 
     public void setHinhvc(String hinhvc) {
         this.hinhvc = hinhvc;
+    }
+
+    public Boolean isYeuThich() {
+        return isYeuThich;
+    }
+
+    public void setYeuThich(Boolean yeuThich) {
+        isYeuThich = yeuThich;
     }
 }

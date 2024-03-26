@@ -98,7 +98,6 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
     private VoucherAdapter voucherAdapter,voucherAdapterdl;
     private ArrayList<Voucher> vouchers,vouchersdl;
     private ImageSlider imageSlider;
-    private Voucher voucher1;
 
     //Sử dụng Strategy pattern
     private IVoucherStrategy iVoucherStrategy ;
@@ -158,6 +157,7 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for(QueryDocumentSnapshot document : task.getResult()){
+                            String idVoucher = document.getId();
                             String MaVoucher=document.get("MaVoucher").toString();
                             String TenVoucher=document.get("TenVoucher").toString();
                             Integer GiaGiam= Integer.parseInt(document.get("GiaGiam").toString());
@@ -166,17 +166,13 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
                             String Mota=document.get("MoTa").toString();
                             String DanhMuc=document.get("DanhMuc").toString();
                             String Hinh=document.get("HinhAnh").toString();
-                            Voucher voucher = new Voucher(MaVoucher,TenVoucher,GiaGiam,GiaGoc,Mota,DanhMuc,SlNguoimua,Hinh);
+                            Voucher voucher = new Voucher(idVoucher,MaVoucher,TenVoucher,GiaGiam,GiaGoc,Mota,DanhMuc,SlNguoimua,Hinh);
 
+                            //Lấy chiến lược tương ứng
                             iVoucherStrategy = getVoucherStrategy(DanhMuc);
-                            if (iVoucherStrategy != null) {
-                                if (DanhMuc.equalsIgnoreCase("DuLich")) {
-                                    iVoucherStrategy.addToVouchersList(voucher, vouchersdl);
-                                } else if (DanhMuc.equalsIgnoreCase("AmThuc")) {
-                                    iVoucherStrategy.addToVouchersList(voucher, vouchers);
-                                }
+                            if(iVoucherStrategy != null){
+                                iVoucherStrategy.addToVouchersList(voucher, DanhMuc.equalsIgnoreCase("DuLich") ? vouchersdl : vouchers);
                             }
-
                         }
                         voucherAdapter.notifyDataSetChanged();
                         voucherAdapterdl.notifyDataSetChanged();

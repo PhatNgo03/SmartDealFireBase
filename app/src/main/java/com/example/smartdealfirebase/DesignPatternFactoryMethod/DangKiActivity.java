@@ -150,5 +150,4 @@ public class DangKiActivity extends AppCompatActivity {
         IRegistration registration = factory.createRegistration();
         registration.register();
     }
-
 }

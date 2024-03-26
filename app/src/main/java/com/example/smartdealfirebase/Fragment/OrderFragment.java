@@ -142,7 +142,6 @@ public class OrderFragment extends Fragment {
                 selectedVoucherAdapter.notifyDataSetChanged();
             }
         });
-
         Button btnCheckOutOrder = view.findViewById(R.id.btnCheckout);
         btnCheckOutOrder.setOnClickListener(new View.OnClickListener() {
             @Override

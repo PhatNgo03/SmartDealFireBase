@@ -11,6 +11,4 @@ public class VoucherSpaStrategy implements IVoucherStrategy {
             voucherList.add(voucher);
         }
     }
-
-
 }

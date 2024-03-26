@@ -23,6 +23,18 @@
         android:layout_width="400dp"
         android:layout_height="209dp"
         tools:srcCompat="@tools:sample/avatars" />
+    <CheckBox
+        android:id="@+id/TymButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="300dp"
+        android:background="@drawable/baseline_favorite_border_24"
+        android:checked="false"
+        android:button="@null"
+        android:layout_alignParentEnd="true">
+    </CheckBox>
     <TextView
         android:id="@+id/tvIFVoucherName"
         android:layout_width="wrap_content"
