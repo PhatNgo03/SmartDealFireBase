@@ -15,7 +15,8 @@ import android.util.Log;
 import com.example.smartdealfirebase.Adapter.VoucherAdapter;
 import com.example.smartdealfirebase.Adapter.VoucherCategoryAdapter;
 import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
-import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
+import com.example.smartdealfirebase.DesignPatternStrategy.DuLichVoucherStrategy;
+import com.example.smartdealfirebase.DesignPatternStrategy.IVoucherStrategy;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,7 +31,7 @@ public class DanhMucDuDichActivity extends AppCompatActivity implements VoucherC
     RecyclerView rvDanhMucDuLich;
     VoucherCategoryAdapter voucherDuLichAdapter;
     ArrayList<Voucher> vouchersDuLich;
-    private strategies.IVoucherStrategy iVoucherStrategy;
+    private IVoucherStrategy iVoucherStrategy;
 
    private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
    private FirebaseFirestore firestore;
@@ -48,7 +49,7 @@ public class DanhMucDuDichActivity extends AppCompatActivity implements VoucherC
         firestore = fireBaseFireStoreSingleton.getFirestore();
 
         // Sử dụng Strategy cho việc thêm các voucher vào danh sách ( chiến lược DuLichVoucherStrategy)
-        iVoucherStrategy = new strategies.DuLichVoucherStrategy();
+        iVoucherStrategy = new DuLichVoucherStrategy();
         loadDataFromFireStore();
 
         LinearLayoutManager l = new LinearLayoutManager(DanhMucDuDichActivity.this,RecyclerView.VERTICAL,false);

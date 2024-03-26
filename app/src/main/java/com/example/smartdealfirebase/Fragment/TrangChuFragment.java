@@ -22,7 +22,9 @@ import com.example.smartdealfirebase.DanhMucAmThucActivity;
 import com.example.smartdealfirebase.DanhMucDuDichActivity;
 import com.example.smartdealfirebase.DanhMucSPaActivity;
 import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
-import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
+import com.example.smartdealfirebase.DesignPatternStrategy.AmThucVoucherStrategy;
+import com.example.smartdealfirebase.DesignPatternStrategy.DuLichVoucherStrategy;
+import com.example.smartdealfirebase.DesignPatternStrategy.IVoucherStrategy;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.R;
 import com.example.smartdealfirebase.ThongTinVoucherActivity;
@@ -43,6 +45,7 @@ import java.util.List;
  * create an instance of this fragment.
  *
  */
+//Client sử dung Adapter
 public class TrangChuFragment extends Fragment implements VoucherAdapter.Listener {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -98,10 +101,11 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
     private Voucher voucher1;
 
     //Sử dụng Strategy pattern
-    private strategies.IVoucherStrategy iVoucherStrategy ;
+    private IVoucherStrategy iVoucherStrategy ;
 
     //Khai báo đối tượng singleton
     private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
+    private FirebaseFirestore firestore;
 
     private void initRecyclerViews(View view) {
         vouchers = new ArrayList<>();
@@ -119,13 +123,13 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
         rvVoucherdl.setAdapter(voucherAdapterdl);
     }
     // xac dinh chien luoc
-    private strategies.IVoucherStrategy getVoucherStrategy(String danhMuc) {
+    private IVoucherStrategy getVoucherStrategy(String danhMuc) {
         if (danhMuc.equalsIgnoreCase("DuLich")) {
-        return new strategies.DuLichVoucherStrategy();
-         }
+            return new DuLichVoucherStrategy();
+        }
         else if (danhMuc.equalsIgnoreCase("AmThuc")) {
-        return new strategies.AmThucVoucherStrategy();}
-     return null;
+            return new AmThucVoucherStrategy();}
+        return null;
     }
     private void setSlideModels() {
         ArrayList<SlideModel> slideModels = new ArrayList<>();
@@ -148,7 +152,7 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
         vouchers.clear();
         vouchersdl.clear();
         // Sử dụng singleton để lấy FireBaseFirestore
-        FirebaseFirestore firestore = fireBaseFireStoreSingleton.getInstance().getFirestore();
+        firestore = fireBaseFireStoreSingleton.getInstance().getFirestore();
         firestore.collection("Voucher").orderBy("MaVoucher")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -189,7 +193,7 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Khởi tạo FirestoreClientSingleton tránh bị null excep
+        // Khởi tạo fireBaseFireStoreSingleton tránh bị null excep
         fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
         imageSlider = view.findViewById(R.id.image_slider);
         searchbt=view.findViewById(R.id.edtserchTrangChu);

@@ -149,12 +149,13 @@ private void fetchUserInfoFromFirestore() {
         String userPhoneNumber = user.getPhoneNumber(); // Lấy số điện thoại của người dùng hiện tại
 
         DocumentReference docRef;
-        if (userPhoneNumber != null) {
-            // Trường hợp đăng nhập bằng số điện thoại, sử dụng số điện thoại để truy vấn Firestore
-            docRef = db.collection("KhachHang").document(userPhoneNumber);
-        } else if (userEmail != null) {
+        if (userEmail != null) {
             // Trường hợp đăng nhập bằng email, sử dụng email để truy vấn Firestore
             docRef = db.collection("KhachHang").document(userEmail);
+
+        } else if (userPhoneNumber != null) {
+            // Trường hợp đăng nhập bằng số điện thoại, sử dụng số điện thoại để truy vấn Firestore
+            docRef = db.collection("NguoiDungPhone").document(userPhoneNumber);
         } else {
             // Xử lý khi không thể lấy được số điện thoại hoặc email của người dùng
             return;

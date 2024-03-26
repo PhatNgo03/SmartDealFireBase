@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.smartdealfirebase.EditVoucherActivity;
 import com.example.smartdealfirebase.Model.ItemCart;
 import com.example.smartdealfirebase.Model.Voucher;
+import com.example.smartdealfirebase.Prototype.VoucherPrototype;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,10 +39,10 @@ import java.util.List;
 public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
 
     Context context;
-    ArrayList<Voucher> vouchersDanhMuc;
+    ArrayList<VoucherPrototype> vouchersDanhMuc;
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    public NCCAdapter(Context context, ArrayList<Voucher> vouchersDanhMuc) {
+    public NCCAdapter(Context context, ArrayList<VoucherPrototype> vouchersDanhMuc) {
         this.context = context;
         this.vouchersDanhMuc = vouchersDanhMuc;
     }
@@ -56,11 +57,11 @@ public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
 
     @Override
     public void onBindViewHolder(@NonNull VoucherVH holder, @SuppressLint("RecyclerView") int position) {
-        Voucher voucher = vouchersDanhMuc.get(position);
-        holder.tvTenVoucherNCC.setText(voucher.getVoucherName());
-        holder.tvGiaGiamNCC.setText(String.valueOf(voucher.getDiscountPrice()));
-        holder.tvGiaGocNCC.setText(String.valueOf(voucher.getPrice()));
-        String imageUri= voucher.getHinhvc();
+        VoucherPrototype voucher = vouchersDanhMuc.get(position);
+        holder.tvTenVoucherNCC.setText(voucher.getTenVoucher());
+        holder.tvGiaGiamNCC.setText(String.valueOf(voucher.getGiaGiam()));
+        holder.tvGiaGocNCC.setText(String.valueOf(voucher.getGiaGoc()));
+        String imageUri= voucher.getHinhAnh();
         holder.tvDanhMucGoc.setText(String.valueOf(voucher.getDanhMuc()));
 
         Glide.with(holder.itemView.getContext()).load(imageUri).into(holder.img_VoucherNCC);
@@ -78,7 +79,7 @@ public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, EditVoucherActivity.class);
-                intent.putExtra("Voucher", voucher);
+                intent.putExtra("Voucher", (CharSequence) voucher);
                 context.startActivity(intent);
             }
         });

@@ -47,14 +47,14 @@
     </LinearLayout>
 </ScrollView>
     <Button
-        android:id="@+id/btGiaoHang"
+        android:id="@+id/btnBuyVoucherToCart"
         android:layout_gravity="center"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="270dp"
         android:layout_width="259dp"
         android:layout_height="51dp"
         android:textSize="20dp"
         android:background="@drawable/cc"
-        android:text="Nhập thông tin giao hàng"
+        android:text="Mua Hàng"
         android:textAllCaps="false"/>
 
 </FrameLayout>

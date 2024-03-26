@@ -11,7 +11,8 @@ import android.os.Bundle;
 
 import com.example.smartdealfirebase.Adapter.VoucherCategoryAdapter;
 import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
-import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
+import com.example.smartdealfirebase.DesignPatternStrategy.AmThucVoucherStrategy;
+import com.example.smartdealfirebase.DesignPatternStrategy.IVoucherStrategy;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,7 +34,7 @@ public class DanhMucAmThucActivity extends AppCompatActivity implements VoucherC
     private FireBaseFireStoreSingleton fireBaseFireStoreSingleton;
     private FirebaseFirestore firestore;
 
-    private strategies.IVoucherStrategy iVoucherStrategy;
+    private IVoucherStrategy iVoucherStrategy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +46,10 @@ public class DanhMucAmThucActivity extends AppCompatActivity implements VoucherC
 
         fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
         firestore = fireBaseFireStoreSingleton.getFirestore();
+
         // Sử dụng Strategy cho việc thêm các voucher vào danh sách ( chiến lược AmThucVoucherStrategy)
-        iVoucherStrategy = new strategies.AmThucVoucherStrategy();
+        iVoucherStrategy = new AmThucVoucherStrategy();
+
         firestore.collection("Voucher").orderBy("MaVoucher")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

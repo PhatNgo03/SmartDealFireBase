@@ -1,5 +1,6 @@
 package com.example.smartdealfirebase.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,12 @@ import java.util.List;
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
     private Context context;
     private List<ItemCart> itemCarts;
+
+    private OnItemLongClickListener itemLongClickListener;
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.itemLongClickListener = listener;
+    }
     public OrderAdapter(Context context,List<ItemCart> itemCarts) {
         this.context = context;
         if (itemCarts == null) {
@@ -36,12 +43,22 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ItemCart itemCart = itemCarts.get(position);
         if (itemCarts != null){
             holder.tvVoucherName.setText(itemCart.getVoucherName());
              holder.tvDate.setText(itemCart.getNgayMua());
              holder.tvTotal.setText(String.valueOf(itemCart.getToTal()));
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (itemLongClickListener != null) {
+                        itemLongClickListener.onItemLongClick(position);
+                        return true;
+                    }
+                    return false;
+                }
+            });
     }
 
     }
@@ -64,7 +81,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             tvVoucherName = itemView.findViewById(R.id.tvVoucherNameLS);
             tvTotal = itemView.findViewById(R.id.tvTongTienLS);
             tvDate = itemView.findViewById(R.id.tvDate);
-            tvTrangThai = itemView.findViewById(R.id.tvHuy);
+            tvTrangThai = itemView.findViewById(R.id.tvTrangThai);
         }
+    }
+    public interface OnItemLongClickListener {
+        void onItemLongClick(int position);
     }
 }

@@ -8,18 +8,18 @@
     >
     <LinearLayout
         android:layout_width="360dp"
-        android:layout_height="130dp"
+        android:layout_height="150dp"
         android:layout_margin="15dp"
         android:background="@drawable/itemcard" >
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="96dp">
+            android:layout_height="160dp">
 
 
 
             <ImageView
-                android:id="@+id/imgVoucherCart"
+                android:id="@+id/imgVoucherOrder"
                 android:layout_width="119dp"
                 android:layout_height="80dp"
                 android:layout_margin="10dp"
@@ -27,11 +27,11 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvtenvoucherCart"
+                    android:id="@+id/tvVoucherNameOder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TAKOYAKI-BUFFET  hơn 40 loại nhân"
@@ -42,29 +42,43 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/tvDiscountPriceCart"
+                        android:id="@+id/tvDiscountPriceOrder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="192.000 đ"
                         android:textColor="@color/red" />
 
                     <TextView
-                        android:id="@+id/tvPriceCart"
+                        android:id="@+id/tvPriceOrder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:text="240.000đ"
+                        android:textColor="@color/black"></TextView>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tổng tiền :"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvToTalOrder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="15dp"
                         android:text="240.000đ"
-                        android:textColor="@color/black"></TextView>
+                        android:textColor="@color/red"></TextView>
 
-                    <CheckBox
-                        android:id="@+id/cbCart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="15dp"
 
-                        android:textColor="@color/black"></CheckBox>
                 </LinearLayout>
 
 
@@ -72,22 +86,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:layout_width="72dp"
-                        android:layout_height="21dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bksearch"
-                        android:gravity="center">
-
-                        <ImageButton
-                            android:id="@+id/btnDecreaseCart"
-                            android:layout_width="14dp"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/white"
-                            android:src="@drawable/baseline_remove_24" />
+
+                            android:layout_marginRight="10dp"
+                            android:text="Số lượng"
+                            android:textColor="@color/black"
+                            android:textSize="15dp"></TextView>
 
                         <TextView
-                            android:id="@+id/tvQuantityCart"
+                            android:id="@+id/tvQuantityOrder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
@@ -95,46 +104,28 @@
                             android:text="1"
                             android:textColor="@color/black"
                             android:textSize="15dp"></TextView>
-
-                        <ImageButton
-                            android:id="@+id/btnIncreaseCart"
-                            android:layout_width="14dp"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/white"
-                            android:src="@drawable/baseline_add_24" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="72dp"
-                        android:layout_height="21dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bksearch">
-
-                        <TextView
-                            android:id="@+id/btnDeleteCart"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            android:text="Xóa"
-                            android:textAlignment="center"
-                            android:textColor="@color/black">
-
-                        </TextView>
-                    </LinearLayout>
-
-
                     <TextView
-                        android:id="@+id/tvTongTien"
+                        android:id="@+id/tvDeleteOrder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="tong tien"
-                        android:visibility="gone"></TextView>
+                        android:layout_marginLeft="50dp"
+                        android:text="Hủy"
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+                    </LinearLayout>
+
+
+
+
+
                 </LinearLayout>
+
             </LinearLayout>
 
 
         </LinearLayout>
 
-    </LinearLayout>
 </LinearLayout>
