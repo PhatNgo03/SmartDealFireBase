@@ -1,4 +1,4 @@
-package com.example.smartdealfirebase;
+package com.example.smartdealfirebase.DesignPatternCommandAdd;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.smartdealfirebase.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -35,7 +36,7 @@ public class AddVoucherActivity extends AppCompatActivity {
     Button btAddVoucher;
     Uri imageUri;
     StorageReference storageReference;
-    FirebaseFirestore firestore;
+    FirebaseFirestore fireStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,17 +53,15 @@ public class AddVoucherActivity extends AppCompatActivity {
         btAddVoucher =findViewById(R.id.btAddVoucher);
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference("images/");
-        firestore = FirebaseFirestore.getInstance();
+        fireStore = FirebaseFirestore.getInstance();
 
         btAddVoucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (imageUri != null) {
-                    // Tải hình ảnh lên Firebase Storage
-                    uploadImageToFirebaseStorage(imageUri);
-                } else {
-                    Toast.makeText(AddVoucherActivity.this, "Hãy chọn một hình ảnh", Toast.LENGTH_SHORT).show();
-                }
+
+                AddCommand addCommand = new AddVoucherCommand(AddVoucherActivity.this);
+                addCommand.execute();
+
             }
         });
 
@@ -75,6 +74,15 @@ public class AddVoucherActivity extends AppCompatActivity {
 
     }
 
+//    public  void AddVoucher()
+//    {
+//        if (imageUri != null) {
+//            // Tải hình ảnh lên Firebase Storage
+//            uploadImageToFirebaseStorage(imageUri);
+//        } else {
+//            Toast.makeText(AddVoucherActivity.this, "Hãy chọn một hình ảnh", Toast.LENGTH_SHORT).show();
+//        }
+//    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -84,7 +92,7 @@ public class AddVoucherActivity extends AppCompatActivity {
             imgVoucherDanhMuc.setImageURI(imageUri);
         }
         else {
-            Log.d("ngu", "fsdkjfs");
+            Log.d("sai", "fsdkjfs");
         }
     }
 
@@ -94,7 +102,7 @@ public class AddVoucherActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,100);
     }
-    private void uploadImageToFirebaseStorage(Uri imageUri) {
+    public void uploadImageToFirebaseStorage(Uri imageUri) {
 
         StorageReference fileReference = storageReference.child(System.currentTimeMillis() + ".jpg");
         fileReference.putFile(imageUri)
@@ -134,7 +142,7 @@ public class AddVoucherActivity extends AppCompatActivity {
         voucher.put("HinhAnh",imageUri);
 
         // Thêm dữ liệu vào Firestore
-        firestore.collection("Voucher")
+        fireStore.collection("Voucher")
                 .add(voucher)
                 .addOnSuccessListener(documentReference -> {
                     // Dữ liệu đã được lưu trữ thành công vào Firestore

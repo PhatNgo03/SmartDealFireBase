@@ -62,7 +62,7 @@ public class CartActivity extends AppCompatActivity {
 
         }
 
-        backCart = findViewById(R.id.backcart);
+        backCart = findViewById(R.id.backCart);
         backCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

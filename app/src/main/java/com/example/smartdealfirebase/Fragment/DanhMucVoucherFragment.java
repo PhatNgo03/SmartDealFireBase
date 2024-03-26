@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.smartdealfirebase.Adapter.NCCAdapter;
-import com.example.smartdealfirebase.AddVoucherActivity;
+import com.example.smartdealfirebase.DesignPatternCommandAdd.AddVoucherActivity;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnCompleteListener;

@@ -83,9 +83,7 @@ public class TaiKhoanFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_tai_khoan, container, false);
     }
 
-
-
-    TextView tvten,tvemail,tvdangxuat,tvttcn,tvLsMuaHang;
+    TextView tvTen,tvEmail,tvDangXuat,tvTTCN,tvLsMuaHang;
 
     FireBaseFireStoreSingleton fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
     FirebaseFirestore db = fireBaseFireStoreSingleton.getFirestore();
@@ -98,12 +96,12 @@ public class TaiKhoanFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        tvttcn=view.findViewById(R.id.tvinfo);
+        tvTTCN=view.findViewById(R.id.tvinfo);
         tvLsMuaHang = view.findViewById(R.id.tvLicSuMuaHang);
-        tvten=view.findViewById(R.id.tvten);
-        tvemail=view.findViewById(R.id.tvemail);
+        tvTen=view.findViewById(R.id.tvten);
+        tvEmail=view.findViewById(R.id.tvemail);
         firebaseAuth=FirebaseAuth.getInstance();
-        tvdangxuat=view.findViewById(R.id.btndangxuat);
+        tvDangXuat=view.findViewById(R.id.btndangxuat);
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
@@ -122,31 +120,31 @@ public class TaiKhoanFragment extends Fragment {
                     khachHangDocRef.get().addOnSuccessListener(khachHangDocumentSnapshot -> {
                         if (khachHangDocumentSnapshot.exists()) {
                             String hoVaTen = khachHangDocumentSnapshot.getString("HoTen");
-                            tvten.setText(hoVaTen);
+                            tvTen.setText(hoVaTen);
                         } else {
-                            tvten.setText("");
+                            tvTen.setText("");
                         }
                     }).addOnFailureListener(e -> {
-                        tvten.setText("Bạn chưa chỉnh sửa TTCN");
+                        tvTen.setText("Bạn chưa chỉnh sửa TTCN");
                     });
 
                     // Set the email to the email TextView
-                    tvemail.setText(email);
+                    tvEmail.setText(email);
                 } else {
-                    tvemail.setText("Người Dùng");
-                    tvten.setText("Nguời dùng");
+                    tvEmail.setText("Người Dùng");
+                    tvTen.setText("Nguời dùng");
                 }
             }).addOnFailureListener(e -> {
-                tvemail.setText("Lỗi khi lấy dữ liệu từ Firestore");
-                tvten.setText("Lỗi khi lấy dữ liệu từ Firestore");
+                tvEmail.setText("Lỗi khi lấy dữ liệu từ Firestore");
+                tvTen.setText("Lỗi khi lấy dữ liệu từ Firestore");
             });
         } else {
             // Người dùng chưa đăng nhập, xử lý thông báo tương ứng
-            tvemail.setText("Chưa đăng nhập");
-            tvten.setText("Chưa đăng nhập");
+            tvEmail.setText("Chưa đăng nhập");
+            tvTen.setText("Chưa đăng nhập");
         }
 
-        tvdangxuat.setOnClickListener(new View.OnClickListener() {
+        tvDangXuat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 firebaseAuth.signOut();
@@ -154,7 +152,7 @@ public class TaiKhoanFragment extends Fragment {
             }
         });
 
-        tvttcn.setOnClickListener(new View.OnClickListener() {
+        tvTTCN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), ThongTinCaNhanActivity.class));
@@ -167,9 +165,9 @@ public class TaiKhoanFragment extends Fragment {
                 startActivity(new Intent(getContext(), LichSuMuaHang.class));
             }
         });
-        if(tvemail.getText().toString().equals("Chưa đăng nhập")&&tvten.getText().toString().equals("Chưa đăng nhập")){
-            tvdangxuat.setText("Đăng nhập");
-            tvttcn.setOnClickListener(new View.OnClickListener() {
+        if(tvEmail.getText().toString().equals("Chưa đăng nhập")&&tvTen.getText().toString().equals("Chưa đăng nhập")){
+            tvDangXuat.setText("Đăng nhập");
+            tvTTCN.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(getContext(),DangNhapActivity.class));

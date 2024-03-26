@@ -37,10 +37,12 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
 
     String userEmail; // The userEmail will store the currently logged-in user's email
 
-    EditText mSDT, memail, edten, mngaysinh, mdiachi;
+    EditText mSDT, mEmail, mTen, mNgaysinh, mDiachi;
     FirebaseFirestore db;
-    Button btnluu;
-    ImageView back;
+    Button btnLuu;
+    ImageView imgBack;
+
+
 
     private Spinner spinnerGioiTinh;
     private ArrayAdapter<String> gioiTinhAdapter;
@@ -48,6 +50,9 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_thong_tin_ca_nhan);
         spinnerGioiTinh = findViewById(R.id.spinnerGioiTinh);
         gioiTinhAdapter = new ArrayAdapter<>(this, R.layout.spinner_item);
@@ -72,7 +77,7 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
 
         // Initialize views and set click listener for "Lưu" (Save) button
         initView();
-        btnluu.setOnClickListener(new View.OnClickListener() {
+        btnLuu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateUserInfoInFirestore();
@@ -85,24 +90,29 @@ public class ThongTinCaNhanActivity extends AppCompatActivity {
         // ... (rest of the code)
     }
 
+
+
+
+    // Gọi các phương thức từ trạng thái hiện tại
+
     private void initView() {
-        memail = findViewById(R.id.edtEmail);
-        edten = findViewById(R.id.edthovaten);
+        mEmail = findViewById(R.id.edtEmail);
+        mTen = findViewById(R.id.edtHoVaTen);
         mSDT = findViewById(R.id.edtSDT);
-        mngaysinh = findViewById(R.id.edtngaysinh);
+        mNgaysinh = findViewById(R.id.edtNgaySinh);
 
-        mdiachi = findViewById(R.id.edtdiachi);
-        btnluu = findViewById(R.id.btnsuatt);
-        back = findViewById(R.id.back);
+        mDiachi = findViewById(R.id.edtDiaChi);
+        btnLuu = findViewById(R.id.btnLuu);
+        imgBack = findViewById(R.id.back);
 
-        back.setOnClickListener(new View.OnClickListener() {
+        imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
 
-        mngaysinh.setOnClickListener(new View.OnClickListener() {
+        mNgaysinh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openDialog1();
@@ -165,27 +175,27 @@ private void fetchUserInfoFromFirestore() {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     // Xử lý khi tài liệu tồn tại
-                    String hoten = documentSnapshot.getString("HoTen");
-                    String ngaysinh = documentSnapshot.getString("NgaySinh");
-                    String diachi = documentSnapshot.getString("DiaChi");
-                    String sdt = documentSnapshot.getString("SDT");
+                    String hoTen = documentSnapshot.getString("HoTen");
+                    String ngaySinh = documentSnapshot.getString("NgaySinh");
+                    String diaChi = documentSnapshot.getString("DiaChi");
+                    String SDT = documentSnapshot.getString("SDT");
                     String gioiTinh = documentSnapshot.getString("GioiTinh");
                     int gioiTinhIndex = gioiTinhAdapter.getPosition(String.valueOf(gioiTinh));
                     spinnerGioiTinh.setSelection(gioiTinhIndex);
                     // Set the fetched data to the EditText fields
-                    edten.setText(hoten);
-                    mngaysinh.setText(ngaysinh);
+                    mTen.setText(hoTen);
+                    mNgaysinh.setText(ngaySinh);
                     spinnerGioiTinh.setTag(gioiTinh);
-                    mdiachi.setText(diachi);
-                    mSDT.setText(sdt);
+                    mDiachi.setText(diaChi);
+                    mSDT.setText(SDT);
                     if (userEmail != null) {
-                        memail.setText(userEmail);
-                        memail.setEnabled(false);
+                        mEmail.setText(userEmail);
+                        mEmail.setEnabled(false);
                     }
                 } else {
                     // Xử lý khi tài liệu không tồn tại
                     if (userEmail != null) {
-                        memail.setText(userEmail);
+                        mEmail.setText(userEmail);
                     }
                 }
             }
@@ -208,19 +218,19 @@ private void fetchUserInfoFromFirestore() {
 
     private void updateUserInfoInFirestore() {
         // Get the updated user information from EditText fields
-        String hoten = edten.getText().toString();
-        String ngaysinh = mngaysinh.getText().toString();
-        String gioitinh = spinnerGioiTinh.getSelectedItem().toString();
-        String diachi = mdiachi.getText().toString();
-        String sdt = mSDT.getText().toString();
+        String hoTen = mTen.getText().toString();
+        String ngaySinh = mNgaysinh.getText().toString();
+        String gioiTinh = spinnerGioiTinh.getSelectedItem().toString();
+        String diaChi = mDiachi.getText().toString();
+        String SDT = mSDT.getText().toString();
 
-        if (sdt.length() < 8 || sdt.length() > 10) {
+        if (SDT.length() < 8 || SDT.length() > 10) {
             showError(mSDT, "Số điện thoại phải có từ 8 đến 10 ký tự.");
             return;
         }
 
         // Create a query to search for the phone number in Firestore
-        Query query = db.collection("KhachHang").whereEqualTo("SDT", sdt);
+        Query query = db.collection("KhachHang").whereEqualTo("SDT", SDT);
 
         // Perform the query
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -232,11 +242,11 @@ private void fetchUserInfoFromFirestore() {
                       {
 
                         Map<String, Object> userMap = new HashMap<>();
-                        userMap.put("HoTen", hoten);
-                        userMap.put("NgaySinh", ngaysinh);
-                        userMap.put("GioiTinh", gioitinh);
-                        userMap.put("DiaChi", diachi);
-                        userMap.put("SDT", sdt);
+                        userMap.put("HoTen", hoTen);
+                        userMap.put("NgaySinh", ngaySinh);
+                        userMap.put("GioiTinh", gioiTinh);
+                        userMap.put("DiaChi", diaChi);
+                        userMap.put("SDT", SDT);
 
 
                         db.collection("KhachHang").document(userEmail)
@@ -279,13 +289,13 @@ private void fetchUserInfoFromFirestore() {
                     thismonth = String.valueOf(month + 1);
                 }
                 String selectedDate = String.valueOf(year) + "-" + thismonth + "-" + String.valueOf(day);
-                mngaysinh.setText(selectedDate);
+                mNgaysinh.setText(selectedDate);
 
                 // Kiểm tra ràng buộc tuổi từ 18 đến 55
                 int age = getAge(year, month, day);
                 if (age < 18 || age > 55) {
                     Toast.makeText(ThongTinCaNhanActivity.this, "Tuổi không hợp lệ", Toast.LENGTH_SHORT).show();
-                    mngaysinh.setText(null);
+                    mNgaysinh.setText(null);
                     openDialog1();
                 }
             }

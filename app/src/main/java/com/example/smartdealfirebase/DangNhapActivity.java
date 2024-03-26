@@ -22,6 +22,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.example.smartdealfirebase.DesignPatternState.AuthenticationManager;
+
 public class DangNhapActivity extends AppCompatActivity {
     EditText edtEmail, edtPassword;
     Button btLoginEmail, btLoginSDT;
@@ -29,13 +31,14 @@ public class DangNhapActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseFirestore firestore;
     DocumentReference dr;
+    private AuthenticationManager authenticationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dang_nhap);
 
-
+        authenticationManager=new AuthenticationManager();
         mAuth = FirebaseAuth.getInstance();
         edtEmail = findViewById(R.id.edtEmailLogin);
         edtPassword = findViewById(R.id.edtMKLogin);
@@ -64,11 +67,13 @@ public class DangNhapActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         Toast.makeText(DangNhapActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        authenticationManager.login();
                         checkRoleUser(authResult.getUser().getUid());
                     }
                 });
             }
         });
+
 
         tvDangKi.setOnClickListener(new View.OnClickListener() {
             @Override

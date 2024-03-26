@@ -1,4 +1,4 @@
-package com.example.smartdealfirebase;
+package com.example.smartdealfirebase.DesignPatternCommandUpDel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +15,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.smartdealfirebase.DesignPatternCommandAdd.AddCommand;
+import com.example.smartdealfirebase.DesignPatternCommandAdd.AddVoucherActivity;
+import com.example.smartdealfirebase.DesignPatternCommandAdd.AddVoucherCommand;
 import com.example.smartdealfirebase.Model.Voucher;
+import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -50,7 +54,7 @@ public class EditVoucherActivity extends AppCompatActivity {
             imgChonHinh.setImageURI(imageUri);
         }
         else {
-            Log.d("ngu", "fsdkjfs");
+            Log.d("sai", "fsdkjfs");
         }
     }
 
@@ -61,7 +65,7 @@ public class EditVoucherActivity extends AppCompatActivity {
         startActivityForResult(intent,100);
     }
 
-    private void uploadImageToFirebaseStorage(Uri imageUri, String maVoucher, String TenVoucher, String GiaGiam, String GiaGoc, String MoTa, String DanhMuc, String SLNguoiMua, String img) {
+    public void uploadImageToFirebaseStorage(Uri imageUri, String maVoucher, String TenVoucher, String GiaGiam, String GiaGoc, String MoTa, String DanhMuc, String SLNguoiMua, String img) {
 
         StorageReference fileReference = storageReference.child(System.currentTimeMillis() + ".jpg");
         fileReference.putFile(imageUri)
@@ -129,7 +133,7 @@ public class EditVoucherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_voucher);
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference("images/");
-          firestore = FirebaseFirestore.getInstance();
+        firestore = FirebaseFirestore.getInstance();
         imgChonHinh = findViewById(R.id.imageViewDanhMuc);
         edtMaVoucher = findViewById(R.id.edtMaVoucherSua);
         edtTenVoucher = findViewById(R.id.edtTenVoucherDanhMucSUa);
@@ -158,24 +162,14 @@ public class EditVoucherActivity extends AppCompatActivity {
             edtMoTa.setText(voucher.getMoTa());
             edtDanhMuc.setText(voucher.getDanhMuc());
             edtSoLuongNguoiMua.setText(String.valueOf(voucher.getSlnguoimua()));
-
-
-             Glide.with(EditVoucherActivity.this).load(voucher.getHinhvc()).into(imgChonHinh);
+            Glide.with(EditVoucherActivity.this).load(voucher.getHinhvc()).into(imgChonHinh);
         }
 
         btnCapNhat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               String MaVoucher = voucher.getMaVoucher();
-                String TenVoucher = edtTenVoucher.getText().toString();
-                String GiaGiam = edtGiaGiam.getText().toString();
-                String GiaGoc = edtGiaGoc.getText().toString();
-                String MoTa = edtMoTa.getText().toString();
-                String DanhMuc = edtDanhMuc.getText().toString();
-                String SLNguoiMua = edtSoLuongNguoiMua.getText().toString();
-                String img = String.valueOf(imageUri);
-                Log.d("mavocher", MaVoucher);
-                uploadImageToFirebaseStorage(imageUri,MaVoucher, TenVoucher, GiaGiam, GiaGoc, MoTa, DanhMuc, SLNguoiMua, img);
+                IUppDelCommand uppDelCommand = new UppDelVoucherCommand(EditVoucherActivity.this, firestore, storageReference, voucher, imageUri);
+                uppDelCommand.execute();
             }
         });
     }

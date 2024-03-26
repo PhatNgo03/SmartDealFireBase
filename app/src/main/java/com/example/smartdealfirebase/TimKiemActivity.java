@@ -5,24 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 
 import com.example.smartdealfirebase.Adapter.TimKiemAdapter;
+import com.example.smartdealfirebase.DesignPatternCommand.ThongTinVoucherActivity;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -39,7 +37,7 @@ public class TimKiemActivity extends AppCompatActivity implements TimKiemAdapter
     FirebaseFirestore db;
 
 
-    private EditText edtsearch;
+    private EditText edtSearch;
     private ImageButton btSearch;
 
 
@@ -48,14 +46,14 @@ public class TimKiemActivity extends AppCompatActivity implements TimKiemAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tim_kiem);
 
-        recyclerViewVoucher = findViewById(R.id.rvtimkiemsach);
+        recyclerViewVoucher = findViewById(R.id.rvTimKiemSach);
         vouchers = new ArrayList<>();
 
         timKiemAdapter = new TimKiemAdapter(vouchers, this);
         recyclerViewVoucher.setAdapter(timKiemAdapter); // Set the adapter to the RecyclerView
         recyclerViewVoucher.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        edtsearch = findViewById(R.id.edtsearch);
+        edtSearch = findViewById(R.id.edtSearch);
         btSearch=findViewById(R.id.btnSearch);
         db = FirebaseFirestore.getInstance();
 
@@ -81,7 +79,7 @@ public class TimKiemActivity extends AppCompatActivity implements TimKiemAdapter
         btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Ten =  edtsearch.getText().toString().trim();
+                String Ten =  edtSearch.getText().toString().trim();
                 if(Ten.isEmpty()){
                     return;
                 }

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/edtsearch"
+            android:id="@+id/edtSearch"
             android:backgroundTint="@color/white"
             android:padding="5dp"
             android:hint="Nhập thông tin tìm kiếm"
@@ -36,7 +36,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="30dp"
-        android:id="@+id/rvtimkiemsach"
+        android:id="@+id/rvTimKiemSach"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

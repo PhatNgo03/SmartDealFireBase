@@ -46,7 +46,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/edthovaten"
+                    android:id="@+id/edtHoVaTen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="13dp"
@@ -68,7 +68,7 @@
                     android:textSize="17dp"
                     android:textStyle="bold" />
                 <EditText
-                    android:id="@+id/edtngaysinh"
+                    android:id="@+id/edtNgaySinh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="13dp"
@@ -139,7 +139,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/edtdiachi"
+                    android:id="@+id/edtDiaChi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="13dp"
@@ -179,7 +179,7 @@
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/btnsuatt"
+        android:id="@+id/btnLuu"
         android:layout_width="125dp"
         android:layout_height="50dp"
         android:layout_gravity="center"

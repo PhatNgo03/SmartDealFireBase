@@ -3,8 +3,6 @@ package com.example.smartdealfirebase.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.smartdealfirebase.EditVoucherActivity;
-import com.example.smartdealfirebase.Model.ItemCart;
+import com.example.smartdealfirebase.DesignPatternCommandUpDel.EditVoucherActivity;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,10 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
 

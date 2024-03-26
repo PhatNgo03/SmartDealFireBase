@@ -25,7 +25,7 @@ import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSin
 import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.R;
-import com.example.smartdealfirebase.ThongTinVoucherActivity;
+import com.example.smartdealfirebase.DesignPatternCommand.ThongTinVoucherActivity;
 import com.example.smartdealfirebase.TimKiemActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,7 +35,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.

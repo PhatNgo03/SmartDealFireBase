@@ -25,7 +25,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity implements CartFragment.OnOrderButtonClickListener {
 
-    BottomNavigationView bnv;
+    BottomNavigationView BottomNavigationView;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnOr
         setContentView(R.layout.activity_main);
 
 
-        bnv = findViewById(R.id.bnv);
-        bnv.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        BottomNavigationView = findViewById(R.id.bnv);
+        BottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 display(item.getItemId());
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnOr
 //        intent.putExtra("voucher", voucher);
 //        startActivity(intent);
 //    }
+
         ActivityResultLauncher<Intent> launcher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
         new ActivityResultCallback<ActivityResult>() {
@@ -89,14 +90,14 @@ public class MainActivity extends AppCompatActivity implements CartFragment.OnOr
     @Override
     public void onOrderButtonClick(ItemCart itemCart) {
         OrderFragment orderFragment = new OrderFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("itemCart", itemCart);
-        orderFragment.setArguments(bundle);
+        Bundle Bundle = new Bundle();
+        Bundle.putSerializable("itemCart", itemCart);
+        orderFragment.setArguments(Bundle);
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frContent, orderFragment);
-        transaction.addToBackStack(null); // Để có thể quay lại fragment trước đó bằng nút back
-        transaction.commit();
+        FragmentTransaction Transaction = getSupportFragmentManager().beginTransaction();
+        Transaction.replace(R.id.frContent, orderFragment);
+        Transaction.addToBackStack(null); // Để có thể quay lại fragment trước đó bằng nút back
+        Transaction.commit();
     }
 //    @Override
 //    public void onClickInfo(DichVu dichVu) {

@@ -68,9 +68,6 @@ public class LichSuMuaHang extends AppCompatActivity {
 //                orderAdapter.notifyDataSetChanged();
 //            }
 //        });
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
         if (firebaseUser != null) {
             String userEmail = firebaseUser.getEmail();
 
