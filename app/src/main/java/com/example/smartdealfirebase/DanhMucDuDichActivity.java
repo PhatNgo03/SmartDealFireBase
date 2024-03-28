@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.smartdealfirebase.Adapter.VoucherCategoryAdapter;
-import com.example.smartdealfirebase.DesignPatternCommand.ThongTinVoucherActivity;
+import yeuthich.ThongTinVoucherActivity;
 import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
 import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
 import com.example.smartdealfirebase.Model.Voucher;

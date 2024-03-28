@@ -1,4 +1,4 @@
-package com.example.smartdealfirebase.Fragment;
+package yeuthich;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +25,6 @@ import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSin
 import com.example.smartdealfirebase.DesignPatternStrategy.strategies;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.R;
-import com.example.smartdealfirebase.DesignPatternCommand.ThongTinVoucherActivity;
 import com.example.smartdealfirebase.TimKiemActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -153,6 +152,7 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for(QueryDocumentSnapshot document : task.getResult()){
+                            String idVoucher=document.getId();
                             String MaVoucher=document.get("MaVoucher").toString();
                             String TenVoucher=document.get("TenVoucher").toString();
                             Integer GiaGiam= Integer.parseInt(document.get("GiaGiam").toString());
@@ -161,7 +161,7 @@ public class TrangChuFragment extends Fragment implements VoucherAdapter.Listene
                             String Mota=document.get("MoTa").toString();
                             String DanhMuc=document.get("DanhMuc").toString();
                             String Hinh=document.get("HinhAnh").toString();
-                            Voucher voucher = new Voucher(MaVoucher,TenVoucher,GiaGiam,GiaGoc,Mota,DanhMuc,SlNguoimua,Hinh);
+                            Voucher voucher = new Voucher(idVoucher,MaVoucher,TenVoucher,GiaGiam,GiaGoc,Mota,DanhMuc,SlNguoimua,Hinh, false);
 
                             iVoucherStrategy = getVoucherStrategy(DanhMuc);
                             if (iVoucherStrategy != null) {

@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 
 
 import com.example.smartdealfirebase.Adapter.TimKiemAdapter;
-import com.example.smartdealfirebase.DesignPatternCommand.ThongTinVoucherActivity;
+import yeuthich.ThongTinVoucherActivity;
 import com.example.smartdealfirebase.Model.Voucher;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

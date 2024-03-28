@@ -174,8 +174,5 @@ public class EditVoucherActivity extends AppCompatActivity {
         });
     }
 
-    public void UpdateVoucherByMaVoucher(String maVoucher, String TenVoucher, String GiaGiam, String GiaGoc, String MoTa, String DanhMuc, String SLNguoiMua, String img) {
 
-
-    }
 }

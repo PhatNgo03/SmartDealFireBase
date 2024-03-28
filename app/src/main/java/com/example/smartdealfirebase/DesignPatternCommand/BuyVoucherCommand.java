@@ -1,5 +1,7 @@
 package com.example.smartdealfirebase.DesignPatternCommand;
 
+import yeuthich.ThongTinVoucherActivity;
+
 public class BuyVoucherCommand implements BuyCommand{
     private final ThongTinVoucherActivity activity;
 

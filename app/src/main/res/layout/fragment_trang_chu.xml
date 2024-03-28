@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/frametrangchu"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragment.TrangChuFragment">
+    tools:context="yeuthich.TrangChuFragment">
 
         <ScrollView
             android:layout_width="match_parent"

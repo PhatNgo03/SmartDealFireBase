@@ -1,9 +1,6 @@
-package com.example.smartdealfirebase.Fragment;
-
-import static android.content.Context.MODE_PRIVATE;
+package yeuthich;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,21 +10,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.smartdealfirebase.DangNhapActivity;
+
 import com.example.smartdealfirebase.DesignPatternSingleton.FireBaseFireStoreSingleton;
 import com.example.smartdealfirebase.LichSuMuaHang;
 import com.example.smartdealfirebase.R;
 import com.example.smartdealfirebase.ThongTinCaNhanActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,7 +77,7 @@ public class TaiKhoanFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_tai_khoan, container, false);
     }
 
-    TextView tvTen,tvEmail,tvDangXuat,tvTTCN,tvLsMuaHang;
+    TextView tvTen,tvEmail,tvDangXuat,tvTTCN,tvLsMuaHang,tvYeuThich;
 
     FireBaseFireStoreSingleton fireBaseFireStoreSingleton = FireBaseFireStoreSingleton.getInstance();
     FirebaseFirestore db = fireBaseFireStoreSingleton.getFirestore();
@@ -102,6 +96,9 @@ public class TaiKhoanFragment extends Fragment {
         tvEmail=view.findViewById(R.id.tvemail);
         firebaseAuth=FirebaseAuth.getInstance();
         tvDangXuat=view.findViewById(R.id.btndangxuat);
+        tvYeuThich=view.findViewById(R.id.btnyeuthich);
+
+
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
@@ -152,6 +149,8 @@ public class TaiKhoanFragment extends Fragment {
             }
         });
 
+
+
         tvTTCN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,6 +173,12 @@ public class TaiKhoanFragment extends Fragment {
                 }
             });
         }
+        tvYeuThich.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), DanhSachVoucherDaThichActivity.class));
+            }
+        });
     }
     private void signOutUser() {
         Intent intent=new Intent(getContext(),DangNhapActivity.class);
