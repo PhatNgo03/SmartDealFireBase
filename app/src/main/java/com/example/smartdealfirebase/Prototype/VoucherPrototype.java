@@ -1,6 +1,8 @@
 package com.example.smartdealfirebase.Prototype;
 
-public class VoucherPrototype implements Cloneable{
+import android.os.Bundle;
+
+public class VoucherPrototype implements Cloneable {
     private String maVoucher;
     private String tenVoucher;
     private int giaGiam;
@@ -22,7 +24,7 @@ public class VoucherPrototype implements Cloneable{
     }
     // Phương thức clone
     @Override
-    protected VoucherPrototype clone() throws CloneNotSupportedException{
+    public VoucherPrototype clone() throws CloneNotSupportedException{
         return (VoucherPrototype) super.clone();
     }
 
@@ -89,4 +91,19 @@ public class VoucherPrototype implements Cloneable{
     public void setHinhAnh(String hinhAnh) {
         this.hinhAnh = hinhAnh;
     }
+
+
+    public Bundle toBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putString("maVoucher", maVoucher);
+        bundle.putString("tenVoucher", tenVoucher);
+        bundle.putInt("giaGiam", giaGiam);
+        bundle.putInt("giaGoc", giaGoc);
+        bundle.putInt("slNguoiMua", slNguoiMua);
+        bundle.putString("moTa", moTa);
+        bundle.putString("danhMuc", danhMuc);
+        bundle.putString("hinhAnh", hinhAnh);
+        return bundle;
+    }
+
 }

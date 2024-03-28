@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.smartdealfirebase.CommandPattern.EditVoucherActivity;
+import com.example.smartdealfirebase.Model.Voucher;
 import com.example.smartdealfirebase.Prototype.VoucherPrototype;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,17 +29,18 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
 
     Context context;
     ArrayList<VoucherPrototype> vouchersDanhMuc;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public NCCAdapter(Context context, ArrayList<VoucherPrototype> vouchersDanhMuc) {
         this.context = context;
         this.vouchersDanhMuc = vouchersDanhMuc;
+
     }
 
     @NonNull
@@ -73,7 +75,8 @@ public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, EditVoucherActivity.class);
-                intent.putExtra("Voucher", (CharSequence) voucher);
+//                intent.putExtra("Voucher", (Serializable) voucher);
+                intent.putExtras(voucher.toBundle());
                 context.startActivity(intent);
             }
         });
@@ -105,25 +108,6 @@ public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
         }
     }
 
-//    public void deleteVoucher(Voucher voucher, int position) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        Voucher itemToDelete = vouchersDanhMuc.get(position);
-//        DocumentReference docref = db.collection("Voucher").document(itemToDelete.ge);
-////        docref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-////            @Override
-////            public void onSuccess(Void unused) {
-////                vouchersDanhMuc.remove(position);
-////                notifyItemRemoved(position);
-////                Toast.makeText(context, "Đã xóa", Toast.LENGTH_SHORT).show();
-////            }
-////        }).addOnFailureListener(new OnFailureListener() {
-////            @Override
-////            public void onFailure(@NonNull Exception e) {
-////                Toast.makeText(context, "Xóa không thành công", Toast.LENGTH_SHORT).show();
-////            }
-////        });
-//    }
-
     public void deleteVoucherByMaVoucher(String maVoucher, int position) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference voucherCollection = db.collection("VoucherDanhMuc");
@@ -153,6 +137,7 @@ public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
             }
         });
     }
+
 
 
 }

@@ -57,7 +57,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.GioHangViewHol
     public void addItem(ItemCart itemCart){
         itemCarts.add(itemCart);
     }
-   public static Voucher voucher;
+
 
     @NonNull
     @Override

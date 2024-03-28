@@ -25,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 
 /**
@@ -74,6 +76,7 @@ public class DanhMucVoucherFragment extends Fragment{
         }
     }
     ArrayList<VoucherPrototype> vouchersDanhMuc;
+    ArrayList<Voucher> vouchers;
     RecyclerView rvDanhMucVoucher;
     NCCAdapter nccAdapter;
     ImageButton btVoucher;
@@ -103,6 +106,7 @@ public class DanhMucVoucherFragment extends Fragment{
         rvDanhMucVoucher =view.findViewById(R.id.rvDanhMucVoucher);
         btVoucher = view.findViewById(R.id.btThemVoucher);
         vouchersDanhMuc = new ArrayList<>();
+        vouchers = new ArrayList<>();
         nccAdapter =new NCCAdapter(getContext(),vouchersDanhMuc);
         rvDanhMucVoucher.setAdapter(nccAdapter);
         rvDanhMucVoucher.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));

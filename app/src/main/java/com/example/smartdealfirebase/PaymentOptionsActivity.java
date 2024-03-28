@@ -121,73 +121,6 @@ public class PaymentOptionsActivity extends AppCompatActivity {
         });
 
     }
-//    private void getUserInfoFromFirestore() {
-//        // Lấy thông tin của người dùng hiện tại
-//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if (firebaseUser != null) {
-//            String userId = firebaseUser.getUid();
-//            FirebaseFirestore db = FirebaseFirestore.getInstance();
-//            DocumentReference userRef = db.collection("NguoiDung").document(userId);
-//
-//            userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                @Override
-//                public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                    if (documentSnapshot.exists()) {
-//                        String email = documentSnapshot.getString("Email");
-//
-//                        // Thiết lập trường "Email" cho đơn hàng
-//                        itemCart.setUserId(email);
-//
-//                        // Lưu đơn hàng vào Firestore
-//                        addOrderToFirestore(); // Hoặc sử dụng addOrderToFirestore(itemCart); nếu muốn lưu vào collection "orders"
-//                    } else {
-//                        // Xử lý nếu không tìm thấy thông tin người dùng
-//                        Toast.makeText(PaymentOptionsActivity.this, "Không tìm thấy thông tin người dùng!", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    // Xử lý nếu có lỗi khi lấy thông tin người dùng từ Firestore
-//                    Toast.makeText(PaymentOptionsActivity.this, "Đã xảy ra lỗi khi lấy thông tin người dùng!", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        } else {
-//            // Xử lý nếu không có người dùng đăng nhập
-//            Toast.makeText(PaymentOptionsActivity.this, "Không tìm thấy người dùng đăng nhập!", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
-//    private void addOrderToFirestore() {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//        // Tạo một Map chứa thông tin đặt hàng
-//        Map<String, Object> order = new HashMap<>();
-//        order.put("voucherName", itemCart.getVoucherName());
-//        order.put("discountPrice", itemCart.getDiscountPrice());
-//        order.put("price", itemCart.getPrice());
-//        order.put("quantity", itemCart.getQuantity());
-//        order.put("ToTal",itemCart.getToTal());
-//        order.put("NgayMua",getCurrentDate());
-//        order.put("Email", itemCart.getUserId());
-//
-//        // Lưu thông tin đặt hàng vào Firestore
-//        db.collection("orders").add(order)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-////                        // Xử lý khi lưu thông tin đặt hàng thành công
-//                        Toast.makeText(PaymentOptionsActivity.this, "Cảm ơn đã mua hàng!", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        // Xử lý khi có lỗi xảy ra khi lưu thông tin đặt hàng
-//                        Toast.makeText(PaymentOptionsActivity.this, "Đặt hàng thất bại!", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
 private void getUserInfoFromFirestore() {
     // Lấy thông tin của người dùng hiện tại
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -204,19 +137,6 @@ private void getUserInfoFromFirestore() {
 
                     // Thiết lập trường "Email" cho đơn hàng
                     itemCart.setUserId(email);
-//
-//                    // Tạo một Map chứa thông tin đặt hàng
-//                    Map<String, Object> order = new HashMap<>();
-//                    order.put("voucherName", itemCart.getVoucherName());
-//                    order.put("discountPrice", itemCart.getDiscountPrice());
-//                    order.put("price", itemCart.getPrice());
-//                    order.put("quantity", itemCart.getQuantity());
-//                    order.put("ToTal", itemCart.getToTal());
-//                    order.put("NgayMua", getCurrentDate());
-//                    order.put("Email", itemCart.getUserId());
-//
-//                    // Lưu đơn hàng vào Firestore
-//                    addOrderToFirestore(order); // Sử dụng addOrderToFirestore với tham số là thông tin đặt hàng
                 } else {
                     // Xử lý nếu không tìm thấy thông tin người dùng
                     Toast.makeText(PaymentOptionsActivity.this, "Không tìm thấy thông tin người dùng!", Toast.LENGTH_SHORT).show();
@@ -310,7 +230,7 @@ private void addOrderToFirestore(Map<String, Object> order) {
         requestQueue.add(request);
     }
     private void getClientSecret(String customerId, String ephericalKey) {
-        final int fixedAmount = 1000;
+        final int fixedAmount = 1500000;
         StringRequest request = new StringRequest(Request.Method.POST, "https://api.stripe.com/v1/payment_intents",
                 response -> {
                     try {

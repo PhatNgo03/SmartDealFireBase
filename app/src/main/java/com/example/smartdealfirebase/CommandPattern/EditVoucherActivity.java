@@ -1,5 +1,6 @@
 package com.example.smartdealfirebase.CommandPattern;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.smartdealfirebase.Model.Voucher;
+import com.example.smartdealfirebase.Prototype.VoucherPrototype;
 import com.example.smartdealfirebase.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +41,7 @@ public class EditVoucherActivity extends AppCompatActivity {
     Uri imageUri;
     FirebaseFirestore firestore;
     StorageReference storageReference;
+    private VoucherPrototype voucher;
 
 
     @Override
@@ -148,20 +151,32 @@ public class EditVoucherActivity extends AppCompatActivity {
             }
         });
 
-        Voucher voucher = (Voucher) getIntent().getSerializableExtra("Voucher");
-        if (voucher != null) {
-            edtMaVoucher.setText(voucher.getMaVoucher());
-            edtMaVoucher.setEnabled(false);
-            edtTenVoucher.setText(voucher.getVoucherName());
-            edtGiaGiam.setText(String.valueOf(voucher.getDiscountPrice()));
-            edtGiaGoc.setText(String.valueOf(voucher.getPrice()));
-            edtMoTa.setText(voucher.getMoTa());
-            edtDanhMuc.setText(voucher.getDanhMuc());
-            edtSoLuongNguoiMua.setText(String.valueOf(voucher.getSlnguoimua()));
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            String maVoucher = bundle.getString("maVoucher");
+            String tenVoucher = bundle.getString("tenVoucher");
+            int giaGiam = bundle.getInt("giaGiam");
+            int giaGoc = bundle.getInt("giaGoc");
+            int slNguoiMua = bundle.getInt("slNguoiMua");
+            String moTa = bundle.getString("moTa");
+            String danhMuc = bundle.getString("danhMuc");
+            String hinhAnh = bundle.getString("hinhAnh");
 
 
-             Glide.with(EditVoucherActivity.this).load(voucher.getHinhvc()).into(imgChonHinh);
+
+            voucher = new VoucherPrototype(maVoucher, tenVoucher, giaGiam, giaGoc, slNguoiMua, moTa, danhMuc, hinhAnh);
+
+            edtMaVoucher.setText(maVoucher);
+            edtTenVoucher.setText(tenVoucher);
+            edtGiaGiam.setText(String.valueOf(giaGiam));
+            edtGiaGoc.setText(String.valueOf(giaGoc));
+            edtMoTa.setText(moTa);
+            edtDanhMuc.setText(danhMuc);
+            edtSoLuongNguoiMua.setText(String.valueOf(slNguoiMua));
+            Glide.with(EditVoucherActivity.this).load(hinhAnh).into(imgChonHinh);
+
         }
+
 
         btnCapNhat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,10 +185,5 @@ public class EditVoucherActivity extends AppCompatActivity {
                 uppDelCommand.excecute();
             }
         });
-    }
-
-    public void UpdateVoucherByMaVoucher(String maVoucher, String TenVoucher, String GiaGiam, String GiaGoc, String MoTa, String DanhMuc, String SLNguoiMua, String img) {
-
-
     }
 }

@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.example.smartdealfirebase.Model.Voucher;
+import com.example.smartdealfirebase.Prototype.VoucherPrototype;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 
@@ -11,11 +12,11 @@ public class UppDelVoucherCommand implements IUppDelCommand{
 
     private FirebaseFirestore firestore;
     private StorageReference storageReference;
-    private Voucher voucher;
+    private VoucherPrototype voucher;
     private Uri imageUri;
     private EditVoucherActivity activity;
 
-    public  UppDelVoucherCommand(EditVoucherActivity activity, FirebaseFirestore firestore, StorageReference storageReference, Voucher voucher, Uri imageUri) {
+    public  UppDelVoucherCommand(EditVoucherActivity activity, FirebaseFirestore firestore, StorageReference storageReference, VoucherPrototype voucher, Uri imageUri) {
         this.activity = activity;
         this.firestore = firestore;
         this.storageReference = storageReference;
@@ -26,7 +27,6 @@ public class UppDelVoucherCommand implements IUppDelCommand{
 
     @Override
     public void excecute() {
-        Voucher voucher = (Voucher) activity.getIntent().getSerializableExtra("Voucher");;
         if (voucher != null) {
             String MaVoucher = voucher.getMaVoucher();
             String TenVoucher = activity.edtTenVoucher.getText().toString();
