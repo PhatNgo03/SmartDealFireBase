@@ -3,6 +3,7 @@ package com.example.smartdealfirebase.Prototype;
 import android.os.Bundle;
 
 public class VoucherPrototype implements Cloneable {
+    private String voucherId;
     private String maVoucher;
     private String tenVoucher;
     private int giaGiam;
@@ -12,7 +13,8 @@ public class VoucherPrototype implements Cloneable {
     private String danhMuc;
     private String hinhAnh;
 
-    public VoucherPrototype(String maVoucher, String tenVoucher, int giaGiam, int giaGoc, int slNguoiMua, String moTa, String danhMuc, String hinhAnh) {
+    public VoucherPrototype(String voucherId,String maVoucher, String tenVoucher, int giaGiam, int giaGoc, int slNguoiMua, String moTa, String danhMuc, String hinhAnh) {
+        this.voucherId = voucherId;
         this.maVoucher = maVoucher;
         this.tenVoucher = tenVoucher;
         this.giaGiam = giaGiam;
@@ -92,6 +94,13 @@ public class VoucherPrototype implements Cloneable {
         this.hinhAnh = hinhAnh;
     }
 
+    public String getVoucherId() {
+        return voucherId;
+    }
+
+    public void setVoucherId(String voucherId) {
+        this.voucherId = voucherId;
+    }
 
     public Bundle toBundle() {
         Bundle bundle = new Bundle();

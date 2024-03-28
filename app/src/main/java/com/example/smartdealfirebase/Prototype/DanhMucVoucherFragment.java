@@ -98,7 +98,7 @@ public class DanhMucVoucherFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         // Khởi tạo đối tượng "prototype"
-        voucherPrototype = new VoucherPrototype("MaVoucher", "TenVoucher", 0, 0, 0, "MoTa", "DanhMuc", "HinhAnh");
+        voucherPrototype = new VoucherPrototype("","MaVoucher", "TenVoucher", 0, 0, 0, "MoTa", "DanhMuc", "HinhAnh");
 
         // Khởi tạo Factory với "prototype"
         voucherFactory = new VoucherFactory(voucherPrototype);
@@ -132,6 +132,7 @@ public class DanhMucVoucherFragment extends Fragment{
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             //Sử dụng factory để tạo mới voucher từ prototype
                             VoucherPrototype newVoucher = voucherFactory.createVoucher();
+                            newVoucher.setVoucherId(document.getId());
                             newVoucher.setMaVoucher(document.get("MaVoucher").toString());
                             newVoucher.setTenVoucher(document.get("TenVoucher").toString());
                             newVoucher.setGiaGiam(Integer.parseInt(document.get("GiaGiam").toString()));

@@ -110,7 +110,7 @@ public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
 
     public void deleteVoucherByMaVoucher(String maVoucher, int position) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference voucherCollection = db.collection("VoucherDanhMuc");
+        CollectionReference voucherCollection = db.collection("Voucher");
 
         Query query = voucherCollection.whereEqualTo("MaVoucher", maVoucher);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -118,7 +118,7 @@ public class NCCAdapter extends RecyclerView.Adapter<NCCAdapter.VoucherVH> {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     String documentId = documentSnapshot.getId();
-                    DocumentReference docRef = db.collection("VoucherDanhMuc").document(documentId);
+                    DocumentReference docRef = db.collection("Voucher").document(documentId);
 
                     docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

@@ -164,7 +164,7 @@ public class EditVoucherActivity extends AppCompatActivity {
 
 
 
-            voucher = new VoucherPrototype(maVoucher, tenVoucher, giaGiam, giaGoc, slNguoiMua, moTa, danhMuc, hinhAnh);
+            voucher = new VoucherPrototype("",maVoucher, tenVoucher, giaGiam, giaGoc, slNguoiMua, moTa, danhMuc, hinhAnh);
 
             edtMaVoucher.setText(maVoucher);
             edtTenVoucher.setText(tenVoucher);
